@@ -1,0 +1,36 @@
+<h2>Educations</h2>
+<div formArrayName="educationDetails">
+  <div *ngFor="let education of formArray.controls; let i = index" [formGroupName]="i" class="mb-3">
+    <div class="mb-3">
+      <label for="collegeName" class="form-label">College/University Name</label>
+      <input type="text" id="collegeName" class="form-control" formControlName="collegeName">
+    </div>
+    <div class="mb-3">
+      <label for="degree" class="form-label">Degree</label>
+      <input type="text" id="degree" class="form-control" formControlName="degree">
+    </div>
+    <div class="mb-3">
+        <label for="major" class="form-label">Major</label>
+        <input type="text" id="major" class="form-control" formControlName="major">
+    </div>
+    <div class="mb-3">
+      <label for="startDate" class="form-label">Start Date</label>
+      <input type="date" id="startDate" class="form-control" formControlName="startDate">
+    </div>
+    <div class="mb-3">
+      <label for="endDate" class="form-label">End Date</label>
+      <input type="date" id="endDate" class="form-control" formControlName="endDate">
+    </div>
+    <div class="mb-3">
+      <label for="location" class="form-label">Location</label>
+      <input type="text" id="location" class="form-control" formControlName="location">
+    </div>
+    <div class="mb-3">
+        <label for="gpa" class="form-label">GPA</label>
+        <input type="text" id="_gpa" class="form-control" formControlName="_gpa">
+    </div>
+    <button type="button" class="btn btn-danger" (click)="onRemoveEduaction(i)">Remove</button>
+  </div>
+</div>
+<button type="button" class="btn btn-secondary" (click)="onAddEducation()">Add Education</button>
+

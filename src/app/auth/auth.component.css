@@ -1,0 +1,80 @@
+/* CSS to style the auth form and ensure it aligns properly */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  
+  .auth-container {
+    background-color: #f8f9fa; /* Light grey background */
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow */
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .toggle-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .toggle-container button {
+    width: 48%;
+    padding: 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .toggle-container button.active {
+    background-color: #0056b3; /* Darker blue for active */
+  }
+  
+  .form-container {
+    transition: all 0.3s ease-in-out;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  form div {
+    margin-bottom: 15px;
+  }
+  
+  form label {
+    font-weight: 500;
+  }
+  
+  form input {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    width: 100%;
+  }
+  
+  form button {
+    padding: 10px;
+    background-color: #28a745; /* Green background */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  form button[disabled] {
+    background-color: #6c757d; /* Grey when disabled */
+    cursor: not-allowed;
+  }
+  
+  form button:hover:not([disabled]) {
+    background-color: #218838; /* Darker green on hover */
+  }
+  

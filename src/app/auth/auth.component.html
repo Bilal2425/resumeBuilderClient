@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="auth-container">
+    <!-- Toggle Button for switching between login and register -->
+    <div class="toggle-container">
+      <button (click)="toggleMode()" [class.active]="isLoginMode">Login</button>
+      <button (click)="toggleMode()" [class.active]="!isLoginMode">Register</button>
+    </div>
+
+    <!-- Login Form -->
+    <div class="form-container" *ngIf="isLoginMode">
+      <h2>Login</h2>
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+        <div>
+          <label for="email">Email</label>
+          <input id="email" formControlName="email" required>
+        </div>
+        <div>
+          <label for="password">Password</label>
+          <input type="password" id="password" formControlName="password" required>
+        </div>
+        <button type="submit" [disabled]="loginForm.invalid">Login</button>
+      </form>
+    </div>
+
+    <!-- Register Form -->
+    <div class="form-container" *ngIf="!isLoginMode">
+      <h2>Register</h2>
+      <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+        <div>
+          <label for="username">Username</label>
+          <input id="register-username" formControlName="username" required>
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input type="email" id="email" formControlName="email" required>
+        </div>
+        <div>
+          <label for="register-password">Password</label>
+          <input type="password" id="register-password" formControlName="password" required>
+        </div>
+        <button type="submit" [disabled]="registerForm.invalid">Register</button>
+      </form>
+    </div>
+  </div>
+</div>

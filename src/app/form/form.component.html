@@ -1,0 +1,36 @@
+<div class="container-fluid">
+    <div class="row">
+      <!-- Side Navigation Bar -->
+      <app-sections class="col-md-3 col-lg-2" (sectionChange)="showSection($event)"></app-sections>
+  
+      <!-- Main Form Section -->
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <app-personal-details
+         *ngIf="currentSection === 'personalDetails'"
+         [personalDetailsForm]="personalDetails"
+         (nextSection)= onPersonalDetailsSaveAndContinue()>
+        </app-personal-details>
+
+        <app-work-experience 
+        *ngIf="currentSection === 'workExperience'"
+        [formArray]="workExperiences"
+        (addWorkExperience)="addWorkExperience()"
+        (removeWorkExperience)="removeWorkExperience($event)"
+        (saveWorkExperience)="onSaveWorkExperience()">
+        </app-work-experience>
+
+        <app-education-details 
+        *ngIf="currentSection === 'education'"
+        [formArray]="educationDetails"
+        (addEducation) = "addEducation()"
+        (removeEducation) = "removeEducation($event)">
+        </app-education-details>
+         
+        <!-- <button *ngIf="currentSection ==='workExperience'" type="button" class="btn btn-danger" (click)="removeWorkExperience(i)">Remove</button> -->
+        <button *ngIf="currentSection === 'workExperience'" type="button" class="btn btn-secondary" (click)="addWorkExperience()">Add Work Experience</button>
+
+      
+      </main>
+    </div>
+  </div>
+  
