@@ -40,7 +40,7 @@
                     <!-- Builder Actions (Optional Global Actions) -->
                     <div class="d-flex justify-content-between align-items-center mt-5">
                         @if (currentSection() !== 'personalDetails') {
-                            <button class="btn btn-light rounded-pill px-4 fw-semibold" (click)="showSection('personalDetails')">
+                            <button class="btn btn-light rounded-pill px-4 fw-semibold" (click)="goBack()">
                                 Back
                             </button>
                         } @else {
@@ -51,15 +51,18 @@
                                 <button type="button" class="btn btn-outline-primary rounded-pill px-3 fw-semibold small" (click)="addWorkExperience()">
                                     + Add
                                 </button>
+                                <button type="button" class="btn-vibrant px-4 shadow-lg fw-bold" (click)="goNext()">
+                                    Next
+                                </button>
                             }
                             @if (currentSection() === 'education') {
                                 <button type="button" class="btn btn-outline-primary rounded-pill px-3 fw-semibold small" (click)="addEducation()">
                                     + Add
                                 </button>
+                                <button type="button" class="btn-vibrant px-4 shadow-lg fw-bold" (click)="submitResume()" [disabled]="isSaving()">
+                                    {{ isSaving() ? 'Saving...' : 'Save Resume' }}
+                                </button>
                             }
-                            <button type="button" class="btn-vibrant px-4 shadow-lg fw-bold" (click)="submitResume()" [disabled]="isSaving()">
-                                {{ isSaving() ? 'Saving...' : 'Save Resume' }}
-                            </button>
                         </div>
                     </div>
                 </div>

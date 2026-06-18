@@ -51,6 +51,7 @@ export class FormComponent implements OnInit {
   isSaving = signal<boolean>(false);
   isExporting = signal<boolean>(false);
   completionPercentage = signal<number>(0);
+  resumeId = signal<string | null>(null);
 
   // Use a writable signal for the resume data
   resumeSignal = signal<Resume | null>(null);
@@ -68,21 +69,34 @@ export class FormComponent implements OnInit {
       educationDetails: this.fb.array([]), 
     });
 
-    // Initialize the signal with the current form value
-    this.resumeSignal.set(this.form.value);
+    // Initialize the signal with the current form value properly mapped
+    this.updateResumeSignal(this.form.value);
 
     // Update the signal reactively on form changes
     this.form.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
-      this.resumeSignal.set(value);
+      this.updateResumeSignal(value);
       this.calculateProgress();
     });
 
     const resumeData = history.state?.resume;
     if (resumeData) {
+      if (resumeData.id) {
+        this.resumeId.set(resumeData.id);
+      }
       this.populateForm(resumeData);
     }
 
     this.calculateProgress();
+  }
+
+  private updateResumeSignal(formValue: any) {
+    const mappedResume: Resume = {
+      id: this.resumeId() || undefined,
+      personalDetails: formValue.personalDetails,
+      workExperiences: formValue.workExperiences || [],
+      educations: formValue.educationDetails || []
+    };
+    this.resumeSignal.set(mappedResume);
   }
 
   calculateProgress() {
@@ -111,6 +125,22 @@ export class FormComponent implements OnInit {
 
   onPersonalDetailsSaveAndContinue() {
     this.showSection('workExperience');
+  }
+
+  goNext() {
+    if (this.currentSection() === 'personalDetails') {
+      this.showSection('workExperience');
+    } else if (this.currentSection() === 'workExperience') {
+      this.showSection('education');
+    }
+  }
+
+  goBack() {
+    if (this.currentSection() === 'workExperience') {
+      this.showSection('personalDetails');
+    } else if (this.currentSection() === 'education') {
+      this.showSection('workExperience');
+    }
   }
 
   createWorkExperience(): FormGroup {
@@ -207,7 +237,7 @@ export class FormComponent implements OnInit {
   submitResume() {
     if (this.form.valid) {
       this.isSaving.set(true);
-      const resumeData: Resume = this.form.value;
+      const resumeData: Resume = this.resumeSignal()!;
       
       this.resumeService.saveResume(resumeData).subscribe({
         next: (response) => {
