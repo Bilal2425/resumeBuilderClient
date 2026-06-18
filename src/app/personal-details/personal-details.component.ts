@@ -1,5 +1,6 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormGroup } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PersonalDetails } from '../models/personal-details.model';
 import { PersonalDetailsService } from '../services/personal-details.service';
@@ -7,15 +8,16 @@ import { PersonalDetailsService } from '../services/personal-details.service';
 @Component({
   selector: 'app-personal-details',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './personal-details.component.html',
-  styleUrl: './personal-details.component.css'
+  styleUrl: './personal-details.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PersonalDetailsComponent {
 
 
-  @Input() personalDetailsForm!: FormGroup;
-  @Output() nextSection = new EventEmitter<void>();
+  personalDetailsForm = input.required<FormGroup>();
+  nextSection = output<void>();
   
 
   constructor(private personalDetailsService: PersonalDetailsService) { }
@@ -24,13 +26,13 @@ export class PersonalDetailsComponent {
 
   // Method to get the form value as a PersonDetails object
   getPersonalDetailsValue(): PersonalDetails {
-    return this.personalDetailsForm.value as PersonalDetails;
+    return this.personalDetailsForm().value as PersonalDetails;
   }
 
 
   onSubmit(){
 
-    if(this.personalDetailsForm.valid)
+    if(this.personalDetailsForm().valid)
     {
       const personalDetails: PersonalDetails = this.getPersonalDetailsValue();
 

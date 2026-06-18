@@ -1,60 +1,87 @@
 <div class="form-section">
-  <div class="d-flex align-items-center mb-4">
-    <div class="section-icon me-3 bg-primary-soft text-primary">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+  <div class="d-flex align-items-center mb-5">
+    <div class="section-icon me-3">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
     </div>
-    <h2 class="mb-0">Work Experience</h2>
+    <h2 class="mb-0 text-gradient">Work Experience</h2>
   </div>
 
-  <div *ngIf="formArray && formArray.controls.length > 0; else noExperience" [formGroup]="workExperienceForm">
-    <div formArrayName="workExperiences">
-      <div *ngFor="let workExperience of formArray.controls; let i = index" [formGroupName]="i" class="experience-item modern-card p-4 mb-4 bg-light border-0 shadow-none">
-        <div class="d-flex justify-content-between align-items-start mb-3">
-          <h5 class="fw-bold text-primary mb-0">Experience #{{ i + 1 }}</h5>
-          <button type="button" class="btn btn-sm btn-outline-danger border-0" (click)="onRemoveWorkExperience(i)">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-          </button>
-        </div>
+  @if (formArray() && formArray().controls.length > 0) {
+    <div [formGroup]="workExperienceForm()">
+      <div formArrayName="workExperiences">
+        @for (workExperience of formArray().controls; track i; let i = $index) {
+          <div [formGroupName]="i" class="experience-item modern-card p-4 mb-4 bg-light-subtle">
+            <div class="d-flex justify-content-between align-items-start mb-4">
+              <div class="d-flex align-items-center">
+                <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2 me-3">Experience #{{ i + 1 }}</span>
+              </div>
+              <button type="button" class="btn btn-sm btn-outline-danger border-0 rounded-circle p-2" (click)="onRemoveWorkExperience(i)" title="Remove Entry">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+              </button>
+            </div>
 
-        <div class="row g-3">
-          <div class="col-md-6">
-            <label class="form-label">Company Name</label>
-            <input type="text" class="form-control" formControlName="companyName" placeholder="e.g. Google">
+            <div class="row g-4">
+              <div class="col-md-6">
+                <label class="form-label">Company Name</label>
+                <input type="text" class="form-control" [class.is-invalid]="workExperience.get('companyName')?.invalid && workExperience.get('companyName')?.touched" formControlName="companyName" placeholder="e.g. Google">
+                @if (workExperience.get('companyName')?.invalid && workExperience.get('companyName')?.touched) {
+                  <div class="invalid-feedback">Company name is required.</div>
+                }
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Position</label>
+                <input type="text" class="form-control" [class.is-invalid]="workExperience.get('position')?.invalid && workExperience.get('position')?.touched" formControlName="position" placeholder="e.g. Senior Developer">
+                @if (workExperience.get('position')?.invalid && workExperience.get('position')?.touched) {
+                  <div class="invalid-feedback">Position is required.</div>
+                }
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Start Date</label>
+                <input type="date" class="form-control" [class.is-invalid]="workExperience.get('startDate')?.invalid && workExperience.get('startDate')?.touched" formControlName="startDate">
+                @if (workExperience.get('startDate')?.invalid && workExperience.get('startDate')?.touched) {
+                  <div class="invalid-feedback">Start date is required.</div>
+                }
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">End Date</label>
+                <input type="date" class="form-control" [class.is-invalid]="workExperience.get('endDate')?.invalid && workExperience.get('endDate')?.touched" formControlName="endDate">
+                @if (workExperience.get('endDate')?.invalid && workExperience.get('endDate')?.touched) {
+                  <div class="invalid-feedback">End date is required.</div>
+                }
+              </div>
+              <div class="col-12">
+                <label class="form-label">Location</label>
+                <input type="text" class="form-control" [class.is-invalid]="workExperience.get('location')?.invalid && workExperience.get('location')?.touched" formControlName="location" placeholder="e.g. Mountain View, CA">
+                @if (workExperience.get('location')?.invalid && workExperience.get('location')?.touched) {
+                  <div class="invalid-feedback">Location is required.</div>
+                }
+              </div>
+              <div class="col-12">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" [class.is-invalid]="workExperience.get('description')?.invalid && workExperience.get('description')?.touched" formControlName="description" rows="4" placeholder="Describe your key responsibilities and achievements..."></textarea>
+                @if (workExperience.get('description')?.invalid && workExperience.get('description')?.touched) {
+                  <div class="invalid-feedback">Description is required.</div>
+                }
+              </div>
+            </div>
           </div>
-          <div class="col-md-6">
-            <label class="form-label">Position</label>
-            <input type="text" class="form-control" formControlName="position" placeholder="e.g. Senior Developer">
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Start Date</label>
-            <input type="date" class="form-control" formControlName="startDate">
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">End Date</label>
-            <input type="date" class="form-control" formControlName="endDate">
-          </div>
-          <div class="col-12">
-            <label class="form-label">Location</label>
-            <input type="text" class="form-control" formControlName="location" placeholder="e.g. Mountain View, CA">
-          </div>
-          <div class="col-12">
-            <label class="form-label">Description</label>
-            <textarea class="form-control" formControlName="description" rows="3" placeholder="Describe your key responsibilities and achievements..."></textarea>
-          </div>
-        </div>
+        }
       </div>
     </div>
-  </div>
-
-  <ng-template #noExperience>
-    <div class="text-center py-5 bg-light rounded-4 border-2 border-dashed border-secondary opacity-50 mb-4">
-      <p class="mb-0">No work experience added yet.</p>
+  } @else {
+    <div class="text-center py-5 bg-subtle rounded-4 border-dashed mb-4">
+      <div class="mb-3 text-muted opacity-50">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+      </div>
+      <p class="text-muted fw-medium">No work experience added yet.</p>
+      <p class="small text-muted">Highlight your professional journey by adding your roles.</p>
     </div>
-  </ng-template>
+  }
 
   <div class="mt-4">
-    <button type="button" class="btn btn-outline-primary w-100 py-3 border-2 fw-bold" (click)="onAddWorkExperience()">
-      + Add Work Experience
+    <button type="button" class="btn btn-outline-primary w-100 py-3 border-2 rounded-pill fw-bold d-flex align-items-center justify-content-center gap-2" (click)="onAddWorkExperience()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+      Add Work Experience
     </button>
   </div>
 </div>

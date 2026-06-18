@@ -1,5 +1,5 @@
 .builder-layout {
-  height: calc(100vh - 65px); /* Adjusted for navbar height */
+  height: calc(100vh - 76px); /* Match AppComponent content-area */
   overflow: hidden;
 }
 
@@ -10,10 +10,16 @@
 .main-scroll-area {
   height: 100%;
   overflow-y: auto;
-  background-color: #f8fafc;
+  background-color: var(--bg-subtle);
+  scroll-behavior: smooth;
 }
 
 .sidebar-wrapper ::ng-deep app-sections {
   height: 100%;
   display: block;
+}
+
+.modern-card {
+  /* Additional polish for the main builder card */
+  border: 1px solid rgba(255, 255, 255, 0.4);
 }

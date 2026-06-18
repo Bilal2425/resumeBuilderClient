@@ -1,19 +1,36 @@
 .welcome-card {
   border: none;
-  background: linear-gradient(to bottom right, #ffffff, #fdfdff);
+  background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
+  padding: 4rem !important;
 }
 
 .hero-icon {
   display: inline-flex;
-  padding: 20px;
-  background: rgba(79, 70, 229, 0.05);
-  border-radius: 20px;
+  padding: 24px;
+  background: var(--bg-subtle);
+  border-radius: var(--radius-lg);
+  color: var(--primary);
+  margin-bottom: 2rem;
+}
+
+.hero-icon svg {
+  color: var(--primary);
 }
 
 h1 {
-  letter-spacing: -1px;
+  letter-spacing: -0.05em;
+  font-size: 3.5rem;
 }
 
 .lead {
-  font-weight: 400;
+  font-size: 1.25rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btn-vibrant.btn-lg {
+  padding: 1rem 3rem;
+  font-size: 1.125rem;
+  border-radius: var(--radius-full);
 }

@@ -1,5 +1,5 @@
 <div class="auth-wrapper d-flex align-items-center justify-content-center">
-  <div class="auth-card modern-card">
+  <div class="auth-card modern-card animate-fade-in">
     <!-- Toggle Button for switching between login and register -->
     <div class="mode-toggle mb-4">
       <div class="toggle-pill">
@@ -9,51 +9,57 @@
     </div>
 
     <!-- Login Form -->
-    <div class="form-container" *ngIf="isLoginMode">
-      <h2 class="text-center">Welcome Back</h2>
-      <p class="text-muted text-center mb-4">Please enter your details to sign in</p>
-      
-      <div *ngIf="errorMessage" class="alert alert-danger py-2 small mb-3">
-        {{ errorMessage }}
+    @if (isLoginMode) {
+      <div class="form-container">
+        <h2 class="text-center text-gradient">Welcome Back</h2>
+        <p class="text-muted text-center mb-4">Please enter your details to sign in</p>
+        
+        @if (errorMessage) {
+          <div class="alert alert-danger py-2 small mb-3">
+            {{ errorMessage }}
+          </div>
+        }
+
+        <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+          <div class="mb-3">
+            <label class="form-label" for="email">Email Address</label>
+            <input id="email" type="email" class="form-control" formControlName="email" placeholder="name@example.com">
+          </div>
+          <div class="mb-4">
+            <label class="form-label" for="password">Password</label>
+            <input type="password" id="password" class="form-control" formControlName="password" placeholder="••••••••">
+          </div>
+          <button type="submit" class="btn-vibrant w-100" [disabled]="loginForm.invalid">Sign In</button>
+        </form>
       </div>
+    } @else {
+      <!-- Register Form -->
+      <div class="form-container">
+        <h2 class="text-center text-gradient">Create Account</h2>
+        <p class="text-muted text-center mb-4">Join us to start building your resume</p>
 
-      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
-        <div class="mb-3">
-          <label class="form-label" for="email">Email Address</label>
-          <input id="email" type="email" class="form-control" formControlName="email" placeholder="name@example.com">
-        </div>
-        <div class="mb-4">
-          <label class="form-label" for="password">Password</label>
-          <input type="password" id="password" class="form-control" formControlName="password" placeholder="••••••••">
-        </div>
-        <button type="submit" class="btn-vibrant w-100" [disabled]="loginForm.invalid">Sign In</button>
-      </form>
-    </div>
+        @if (errorMessage) {
+          <div class="alert alert-danger py-2 small mb-3">
+            {{ errorMessage }}
+          </div>
+        }
 
-    <!-- Register Form -->
-    <div class="form-container" *ngIf="!isLoginMode">
-      <h2 class="text-center">Create Account</h2>
-      <p class="text-muted text-center mb-4">Join us to start building your resume</p>
-
-      <div *ngIf="errorMessage" class="alert alert-danger py-2 small mb-3">
-        {{ errorMessage }}
+        <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+          <div class="mb-3">
+            <label class="form-label" for="username">Username</label>
+            <input id="register-username" type="text" class="form-control" formControlName="username" placeholder="johndoe">
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="reg-email">Email Address</label>
+            <input type="email" id="reg-email" class="form-control" formControlName="email" placeholder="name@example.com">
+          </div>
+          <div class="mb-4">
+            <label class="form-label" for="register-password">Password</label>
+            <input type="password" id="register-password" class="form-control" formControlName="password" placeholder="••••••••">
+          </div>
+          <button type="submit" class="btn-vibrant w-100" [disabled]="registerForm.invalid">Create Account</button>
+        </form>
       </div>
-
-      <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
-        <div class="mb-3">
-          <label class="form-label" for="username">Username</label>
-          <input id="register-username" type="text" class="form-control" formControlName="username" placeholder="johndoe">
-        </div>
-        <div class="mb-3">
-          <label class="form-label" for="reg-email">Email Address</label>
-          <input type="email" id="reg-email" class="form-control" formControlName="email" placeholder="name@example.com">
-        </div>
-        <div class="mb-4">
-          <label class="form-label" for="register-password">Password</label>
-          <input type="password" id="register-password" class="form-control" formControlName="password" placeholder="••••••••">
-        </div>
-        <button type="submit" class="btn-vibrant w-100" [disabled]="registerForm.invalid">Create Account</button>
-      </form>
-    </div>
+    }
   </div>
 </div>

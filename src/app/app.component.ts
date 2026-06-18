@@ -1,12 +1,23 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { RouterOutlet, Router, RouterLink } from '@angular/router';
+import { AuthService } from './services/auth.service';
 
 @Component({
     selector: 'app-root',
-    imports: [RouterOutlet],
+    imports: [RouterOutlet, RouterLink],
     templateUrl: './app.component.html',
     styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'resumeBuilderClient';
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
+  get isLoggedIn(): boolean {
+    return this.authService.isAuthenticated();
+  }
+
+  onLogout(): void {
+    this.authService.logout();
+    this.router.navigate(['/']);
+  }
 }

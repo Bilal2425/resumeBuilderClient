@@ -1,58 +1,94 @@
 <div class="form-section">
-  <div class="d-flex align-items-center mb-4">
-    <div class="section-icon me-3 bg-primary-soft text-primary">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+  <div class="d-flex align-items-center mb-5">
+    <div class="section-icon me-3">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5-10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
     </div>
-    <h2 class="mb-0">Education</h2>
+    <h2 class="mb-0 text-gradient">Education</h2>
   </div>
 
-  <div [formGroup]="educationDetailsForm">
-    <div formArrayName="educationDetails">
-      <div *ngFor="let education of formArray.controls; let i = index" [formGroupName]="i" class="experience-item modern-card p-4 mb-4 bg-light border-0 shadow-none">
-        <div class="d-flex justify-content-between align-items-start mb-3">
-          <h5 class="fw-bold text-primary mb-0">Education #{{ i + 1 }}</h5>
-          <button type="button" class="btn btn-sm btn-outline-danger border-0" (click)="onRemoveEduaction(i)">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-          </button>
-        </div>
+  @if (formArray() && formArray().controls.length > 0) {
+    <div [formGroup]="educationDetailsForm()">
+      <div formArrayName="educationDetails">
+        @for (education of formArray().controls; track i; let i = $index) {
+          <div [formGroupName]="i" class="experience-item modern-card p-4 mb-4 bg-light-subtle">
+            <div class="d-flex justify-content-between align-items-start mb-4">
+              <div class="d-flex align-items-center">
+                <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2 me-3">Education #{{ i + 1 }}</span>
+              </div>
+              <button type="button" class="btn btn-sm btn-outline-danger border-0 rounded-circle p-2" (click)="onRemoveEduaction(i)" title="Remove Entry">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+              </button>
+            </div>
 
-        <div class="row g-3">
-          <div class="col-12">
-            <label class="form-label">College/University Name</label>
-            <input type="text" class="form-control" formControlName="collegeName" placeholder="e.g. Stanford University">
+            <div class="row g-4">
+              <div class="col-12">
+                <label class="form-label">College/University Name</label>
+                <input type="text" class="form-control" [class.is-invalid]="education.get('collegeName')?.invalid && education.get('collegeName')?.touched" formControlName="collegeName" placeholder="e.g. Stanford University">
+                @if (education.get('collegeName')?.invalid && education.get('collegeName')?.touched) {
+                  <div class="invalid-feedback">College name is required.</div>
+                }
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Degree</label>
+                <input type="text" class="form-control" [class.is-invalid]="education.get('degree')?.invalid && education.get('degree')?.touched" formControlName="degree" placeholder="e.g. Bachelor of Science">
+                @if (education.get('degree')?.invalid && education.get('degree')?.touched) {
+                  <div class="invalid-feedback">Degree is required.</div>
+                }
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Major</label>
+                <input type="text" class="form-control" [class.is-invalid]="education.get('major')?.invalid && education.get('major')?.touched" formControlName="major" placeholder="e.g. Computer Science">
+                @if (education.get('major')?.invalid && education.get('major')?.touched) {
+                  <div class="invalid-feedback">Major is required.</div>
+                }
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Start Date</label>
+                <input type="date" class="form-control" [class.is-invalid]="education.get('startDate')?.invalid && education.get('startDate')?.touched" formControlName="startDate">
+                @if (education.get('startDate')?.invalid && education.get('startDate')?.touched) {
+                  <div class="invalid-feedback">Start date is required.</div>
+                }
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">End Date</label>
+                <input type="date" class="form-control" [class.is-invalid]="education.get('endDate')?.invalid && education.get('endDate')?.touched" formControlName="endDate">
+                @if (education.get('endDate')?.invalid && education.get('endDate')?.touched) {
+                  <div class="invalid-feedback">End date is required.</div>
+                }
+              </div>
+              <div class="col-md-8">
+                <label class="form-label">Location</label>
+                <input type="text" class="form-control" [class.is-invalid]="education.get('location')?.invalid && education.get('location')?.touched" formControlName="location" placeholder="e.g. Stanford, CA">
+                @if (education.get('location')?.invalid && education.get('location')?.touched) {
+                  <div class="invalid-feedback">Location is required.</div>
+                }
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">GPA</label>
+                <input type="text" class="form-control" [class.is-invalid]="education.get('gpa')?.invalid && education.get('gpa')?.touched" formControlName="gpa" placeholder="e.g. 3.8/4.0">
+                @if (education.get('gpa')?.invalid && education.get('gpa')?.touched) {
+                  <div class="invalid-feedback">GPA is required.</div>
+                }
+              </div>
+            </div>
           </div>
-          <div class="col-md-6">
-            <label class="form-label">Degree</label>
-            <input type="text" class="form-control" formControlName="degree" placeholder="e.g. Bachelor of Science">
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Major</label>
-            <input type="text" class="form-control" formControlName="major" placeholder="e.g. Computer Science">
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Start Date</label>
-            <input type="date" class="form-control" formControlName="startDate">
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">End Date</label>
-            <input type="date" class="form-control" formControlName="endDate">
-          </div>
-          <div class="col-md-8">
-            <label class="form-label">Location</label>
-            <input type="text" class="form-control" formControlName="location" placeholder="e.g. Stanford, CA">
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">GPA</label>
-            <input type="text" class="form-control" formControlName="gpa" placeholder="e.g. 3.8/4.0">
-          </div>
-        </div>
+        }
       </div>
     </div>
-  </div>
+  } @else {
+    <div class="text-center py-5 bg-subtle rounded-4 border-dashed mb-4">
+      <div class="mb-3 text-muted opacity-50">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5-10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+      </div>
+      <p class="text-muted fw-medium">No education history added yet.</p>
+      <p class="small text-muted">Showcase your academic background.</p>
+    </div>
+  }
 
   <div class="mt-4">
-    <button type="button" class="btn btn-outline-primary w-100 py-3 border-2 fw-bold" (click)="onAddEducation()">
-      + Add Education
+    <button type="button" class="btn btn-outline-primary w-100 py-3 border-2 rounded-pill fw-bold d-flex align-items-center justify-content-center gap-2" (click)="onAddEducation()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+      Add Education
     </button>
   </div>
 </div>

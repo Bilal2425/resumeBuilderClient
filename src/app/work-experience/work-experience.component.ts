@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, output } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -7,41 +7,27 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './work-experience.component.html',
-  styleUrl: './work-experience.component.css'
+  styleUrl: './work-experience.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WorkExperienceComponent {
-  @Input() workExperienceForm!: FormGroup;
-  @Input() formArray!: FormArray;
-  @Output() addWorkExperience = new EventEmitter<void>();
-  @Output() removeWorkExperience = new EventEmitter<number>();
+  workExperienceForm = input.required<FormGroup>();
+  formArray = input.required<FormArray>();
+  addWorkExperience = output<void>();
+  removeWorkExperience = output<number>();
 
-  constructor( private fb: FormBuilder, private cdr: ChangeDetectorRef) {}
+  constructor() {}
 
-  createWorkExperience(): FormGroup {
-    return this.fb.group({
-      companyName: ['', Validators.required],
-      position: ['', Validators.required],
-      startDate: ['', Validators.required],
-      endDate: ['', Validators.required],
-      location: ['', Validators.required],
-      description: ['', Validators.required]
-    });
-  }
 
   onAddWorkExperience() {
     this.addWorkExperience.emit();
-    this.cdr.detectChanges();
   }
 
   onRemoveWorkExperience(index: number) {
-    this.formArray.removeAt(index);
-    console.log("Removed index:", index, "Current array:", this.formArray.controls)
-    this.cdr.detectChanges();
+    this.removeWorkExperience.emit(index);
   }
 
   trackByFn(index: number, item: any): number {
     return index;
   }
-
-
 }
