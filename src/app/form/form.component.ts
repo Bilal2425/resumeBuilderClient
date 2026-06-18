@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, ChangeDetectionStrategy, computed } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PersonalDetailsComponent } from '../personal-details/personal-details.component';
 import { WorkExperienceComponent } from '../work-experience/work-experience.component';
@@ -14,6 +14,7 @@ import {
 import { Resume } from '../models/resume';
 import { ResumeService } from '../services/resume.service';
 import { Router } from '@angular/router';
+import { ToastService } from '../services/toast.service';
 
 
 @Component({
@@ -32,12 +33,15 @@ import { Router } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FormComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private resumeService = inject(ResumeService);
+  private router = inject(Router);
+  private toastService = inject(ToastService);
+
   form!: FormGroup;
   currentSection = signal<string>('personalDetails');
   isSaving = signal<boolean>(false);
   completionPercentage = signal<number>(0);
-
-  constructor(private fb: FormBuilder, private resumeService: ResumeService, private router: Router) {}
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -190,17 +194,17 @@ export class FormComponent implements OnInit {
       
       this.resumeService.saveResume(resumeData).subscribe({
         next: (response) => {
-          console.log('Resume saved successfully', response);
+          this.toastService.success('Resume saved successfully!');
           this.isSaving.set(false);
           this.router.navigate(['/dashboard']);
         },
         error: (error) => {
-          console.error('Error saving resume', error);
+          this.toastService.error('Error saving resume. Please try again.');
           this.isSaving.set(false);
         }
       });
     } else {
-      console.log('Form is invalid', this.form.errors);
+      this.toastService.warning('Please complete all required fields.');
       this.form.markAllAsTouched();
     }
   }

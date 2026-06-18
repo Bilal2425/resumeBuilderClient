@@ -2,20 +2,20 @@
   <div class="auth-card modern-card animate-fade-in">
     <!-- Toggle Button for switching between login and register -->
     <div class="mode-toggle mb-4">
-      <div class="toggle-pill">
-        <button type="button" (click)="isLoginMode = true" [class.active]="isLoginMode">Login</button>
-        <button type="button" (click)="isLoginMode = false" [class.active]="!isLoginMode">Register</button>
+      <div class="toggle-pill" [class.register-active]="!isLoginMode" role="tablist" aria-label="Authentication Mode">
+        <button type="button" role="tab" [attr.aria-selected]="isLoginMode" (click)="isLoginMode = true" [class.active]="isLoginMode">Login</button>
+        <button type="button" role="tab" [attr.aria-selected]="!isLoginMode" (click)="isLoginMode = false" [class.active]="!isLoginMode">Register</button>
       </div>
     </div>
 
     <!-- Login Form -->
     @if (isLoginMode) {
-      <div class="form-container">
+      <div class="form-container" role="tabpanel">
         <h2 class="text-center text-gradient">Welcome Back</h2>
         <p class="text-muted text-center mb-4">Please enter your details to sign in</p>
         
         @if (errorMessage) {
-          <div class="alert alert-danger py-2 small mb-3">
+          <div class="alert alert-danger py-2 small mb-3" role="alert" aria-live="polite">
             {{ errorMessage }}
           </div>
         }
@@ -23,41 +23,51 @@
         <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
           <div class="mb-3">
             <label class="form-label" for="email">Email Address</label>
-            <input id="email" type="email" class="form-control" formControlName="email" placeholder="name@example.com">
+            <input id="email" type="email" class="form-control" formControlName="email" 
+                   placeholder="name@example.com" aria-required="true"
+                   [attr.aria-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
           </div>
           <div class="mb-4">
             <label class="form-label" for="password">Password</label>
-            <input type="password" id="password" class="form-control" formControlName="password" placeholder="••••••••">
+            <input type="password" id="password" class="form-control" formControlName="password" 
+                   placeholder="••••••••" aria-required="true"
+                   [attr.aria-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
           </div>
-          <button type="submit" class="btn-vibrant w-100" [disabled]="loginForm.invalid">Sign In</button>
+          <button type="submit" class="btn-vibrant w-100" [disabled]="loginForm.invalid" [attr.aria-disabled]="loginForm.invalid">Sign In</button>
         </form>
       </div>
     } @else {
       <!-- Register Form -->
-      <div class="form-container">
+      <div class="form-container" role="tabpanel">
         <h2 class="text-center text-gradient">Create Account</h2>
         <p class="text-muted text-center mb-4">Join us to start building your resume</p>
 
         @if (errorMessage) {
-          <div class="alert alert-danger py-2 small mb-3">
+          <div class="alert alert-danger py-2 small mb-3" role="alert" aria-live="polite">
             {{ errorMessage }}
           </div>
         }
 
         <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
           <div class="mb-3">
-            <label class="form-label" for="username">Username</label>
-            <input id="register-username" type="text" class="form-control" formControlName="username" placeholder="johndoe">
+            <label class="form-label" for="register-username">Username</label>
+            <input id="register-username" type="text" class="form-control" formControlName="username" 
+                   placeholder="johndoe" aria-required="true"
+                   [attr.aria-invalid]="registerForm.get('username')?.invalid && registerForm.get('username')?.touched">
           </div>
           <div class="mb-3">
             <label class="form-label" for="reg-email">Email Address</label>
-            <input type="email" id="reg-email" class="form-control" formControlName="email" placeholder="name@example.com">
+            <input type="email" id="reg-email" class="form-control" formControlName="email" 
+                   placeholder="name@example.com" aria-required="true"
+                   [attr.aria-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
           </div>
           <div class="mb-4">
             <label class="form-label" for="register-password">Password</label>
-            <input type="password" id="register-password" class="form-control" formControlName="password" placeholder="••••••••">
+            <input type="password" id="register-password" class="form-control" formControlName="password" 
+                   placeholder="••••••••" aria-required="true"
+                   [attr.aria-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
           </div>
-          <button type="submit" class="btn-vibrant w-100" [disabled]="registerForm.invalid">Create Account</button>
+          <button type="submit" class="btn-vibrant w-100" [disabled]="registerForm.invalid" [attr.aria-disabled]="registerForm.invalid">Create Account</button>
         </form>
       </div>
     }

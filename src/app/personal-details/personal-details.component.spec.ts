@@ -15,13 +15,14 @@ describe('PersonalDetailsComponent', () => {
     
     fixture = TestBed.createComponent(PersonalDetailsComponent);
     component = fixture.componentInstance;
-    component.personalDetailsForm = new FormGroup({
+    const personalDetailsForm = new FormGroup({
       firstName: new FormControl(''),
       lastName: new FormControl(''),
       email: new FormControl(''),
       phoneNumber: new FormControl(''),
       location: new FormControl('')
     });
+    fixture.componentRef.setInput('personalDetailsForm', personalDetailsForm);
     fixture.detectChanges();
   });
 

@@ -26,8 +26,8 @@ describe('EducationDetailsComponent', () => {
     
     fixture = TestBed.createComponent(EducationDetailsComponent);
     component = fixture.componentInstance;
-    component.educationDetailsForm = fg;
-    component.formArray = fg.get('educationDetails') as FormArray;
+    fixture.componentRef.setInput('educationDetailsForm', fg);
+    fixture.componentRef.setInput('formArray', fg.get('educationDetails') as FormArray);
     fixture.detectChanges();
   });
 
