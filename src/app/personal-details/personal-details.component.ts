@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PersonalDetails } from '../models/personal-details.model';
 import { PersonalDetailsService } from '../services/personal-details.service';
-import { error } from 'console';
 
 @Component({
   selector: 'app-personal-details',

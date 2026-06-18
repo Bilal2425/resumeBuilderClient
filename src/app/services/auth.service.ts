@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { UserLogin, UserRegister } from '../models/user.model';
-import { throws } from 'assert';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({

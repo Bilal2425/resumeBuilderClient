@@ -10,29 +10,28 @@ import { CommonModule } from '@angular/common';
   styleUrl: './work-experience.component.css'
 })
 export class WorkExperienceComponent {
+  @Input() workExperienceForm!: FormGroup;
   @Input() formArray!: FormArray;
-  // @Output() addWorkExperience = new EventEmitter<void>();
+  @Output() addWorkExperience = new EventEmitter<void>();
   @Output() removeWorkExperience = new EventEmitter<number>();
 
-  constructor( private cdr: ChangeDetectorRef) {}
+  constructor( private fb: FormBuilder, private cdr: ChangeDetectorRef) {}
 
-  // createWorkExperience(): FormGroup {
-  //   return this.fb.group({
-  //     companyName: ['', Validators.required],
-  //     position: ['', Validators.required],
-  //     startDate: ['', Validators.required],
-  //     endDate: ['', Validators.required],
-  //     location: ['', Validators.required],
-  //     description: ['', Validators.required]
-  //   });
-  // }
+  createWorkExperience(): FormGroup {
+    return this.fb.group({
+      companyName: ['', Validators.required],
+      position: ['', Validators.required],
+      startDate: ['', Validators.required],
+      endDate: ['', Validators.required],
+      location: ['', Validators.required],
+      description: ['', Validators.required]
+    });
+  }
 
-  // onAddWorkExperience() {
-  //   //this.formArray.push(this.createWorkExperience());
-  //   this.addWorkExperience.emit();
-  //   this.cdr.detectChanges();
-    
-  // }
+  onAddWorkExperience() {
+    this.addWorkExperience.emit();
+    this.cdr.detectChanges();
+  }
 
   onRemoveWorkExperience(index: number) {
     this.formArray.removeAt(index);

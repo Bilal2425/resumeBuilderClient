@@ -1,0 +1,19 @@
+.builder-layout {
+  height: calc(100vh - 65px); /* Adjusted for navbar height */
+  overflow: hidden;
+}
+
+.sidebar-wrapper {
+  height: 100%;
+}
+
+.main-scroll-area {
+  height: 100%;
+  overflow-y: auto;
+  background-color: #f8fafc;
+}
+
+.sidebar-wrapper ::ng-deep app-sections {
+  height: 100%;
+  display: block;
+}

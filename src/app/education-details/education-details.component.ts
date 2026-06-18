@@ -12,6 +12,7 @@ import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } fr
   styleUrl: './education-details.component.css'
 })
 export class EducationDetailsComponent {
+  @Input() educationDetailsForm!: FormGroup;
   @Input() formArray !: FormArray
   @Output() removeEducation = new EventEmitter<number>();
  

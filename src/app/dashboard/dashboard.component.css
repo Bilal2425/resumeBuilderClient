@@ -1,24 +1,19 @@
-img.custom-color{
-    fill:white
+.welcome-card {
+  border: none;
+  background: linear-gradient(to bottom right, #ffffff, #fdfdff);
 }
 
-.container{
-    text-align: center;
-    margin-top: 50px;
+.hero-icon {
+  display: inline-flex;
+  padding: 20px;
+  background: rgba(79, 70, 229, 0.05);
+  border-radius: 20px;
 }
 
-.display-4{
-    font-weight: 300;
-    margin-bottom: 20px;
+h1 {
+  letter-spacing: -1px;
 }
 
-.lead{
-    font-size: 1.25rem;
-    font-weight: 300;
-    margin-bottom: 30px;
-}
-
-.btn-lg{
-    padding: 10px 20px;
-    font-size: 1.25rem;
+.lead {
+  font-weight: 400;
 }

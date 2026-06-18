@@ -49,7 +49,7 @@ export class FormComponent implements OnInit {
     });
 
     //Populating the form
-    const resumeData = history.state.resume;
+    const resumeData = history.state?.resume;
     if (resumeData) {
       this.populateForm(resumeData);
     }

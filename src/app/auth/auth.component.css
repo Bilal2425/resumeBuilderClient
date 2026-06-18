@@ -1,80 +1,55 @@
-/* CSS to style the auth form and ensure it aligns properly */
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-  }
-  
-  .auth-container {
-    background-color: #f8f9fa; /* Light grey background */
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow */
-    width: 100%;
-    max-width: 400px;
-  }
-  
-  .toggle-container {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  
-  .toggle-container button {
-    width: 48%;
-    padding: 10px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .toggle-container button.active {
-    background-color: #0056b3; /* Darker blue for active */
-  }
-  
-  .form-container {
-    transition: all 0.3s ease-in-out;
-  }
-  
-  form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  form div {
-    margin-bottom: 15px;
-  }
-  
-  form label {
-    font-weight: 500;
-  }
-  
-  form input {
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ced4da;
-    width: 100%;
-  }
-  
-  form button {
-    padding: 10px;
-    background-color: #28a745; /* Green background */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-  }
-  
-  form button[disabled] {
-    background-color: #6c757d; /* Grey when disabled */
-    cursor: not-allowed;
-  }
-  
-  form button:hover:not([disabled]) {
-    background-color: #218838; /* Darker green on hover */
-  }
-  
+.auth-wrapper {
+  min-height: 100vh;
+  padding: 1rem;
+  background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.05) 0%, transparent 50%),
+              radial-gradient(circle at bottom right, rgba(124, 58, 237, 0.05) 0%, transparent 50%);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 450px;
+}
+
+.mode-toggle {
+  display: flex;
+  justify-content: center;
+}
+
+.toggle-pill {
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: 50px;
+  display: flex;
+  gap: 4px;
+}
+
+.toggle-pill button {
+  border: none;
+  background: transparent;
+  padding: 8px 24px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: all 0.2s ease;
+}
+
+.toggle-pill button.active {
+  background: white;
+  color: var(--primary-color);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+h2 {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.form-container {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

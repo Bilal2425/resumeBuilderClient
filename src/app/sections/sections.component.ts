@@ -1,5 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
-
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 
 @Component({
   selector: 'app-sections',
@@ -9,10 +8,10 @@ import { Component, Output, EventEmitter } from '@angular/core';
   styleUrl: './sections.component.css'
 })
 export class SectionsComponent {
+  @Input() currentSection: string = 'personalDetails';
   @Output() sectionChange = new EventEmitter<string>();
 
   navigate(section: string){
     this.sectionChange.emit(section);
   }
-
 }

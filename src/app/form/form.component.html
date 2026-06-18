@@ -1,36 +1,55 @@
-<div class="container-fluid">
-    <div class="row">
+<div class="builder-layout">
+    <div class="row g-0 h-100">
       <!-- Side Navigation Bar -->
-      <app-sections class="col-md-3 col-lg-2" (sectionChange)="showSection($event)"></app-sections>
+      <div class="col-md-3 col-lg-2 sidebar-wrapper">
+        <app-sections [currentSection]="currentSection" (sectionChange)="showSection($event)"></app-sections>
+      </div>
   
       <!-- Main Form Section -->
-      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-        <app-personal-details
-         *ngIf="currentSection === 'personalDetails'"
-         [personalDetailsForm]="personalDetails"
-         (nextSection)= onPersonalDetailsSaveAndContinue()>
-        </app-personal-details>
+      <main class="col-md-9 col-lg-10 main-scroll-area">
+        <div class="container-fluid py-5 px-md-5">
+            <div class="row justify-content-center">
+                <div class="col-xl-9">
+                    <div class="modern-card p-4 p-md-5 mb-4">
+                        <app-personal-details
+                            *ngIf="currentSection === 'personalDetails'"
+                            [personalDetailsForm]="personalDetails"
+                            (nextSection)="onPersonalDetailsSaveAndContinue()">
+                        </app-personal-details>
 
-        <app-work-experience 
-        *ngIf="currentSection === 'workExperience'"
-        [formArray]="workExperiences"
-        (addWorkExperience)="addWorkExperience()"
-        (removeWorkExperience)="removeWorkExperience($event)"
-        (saveWorkExperience)="onSaveWorkExperience()">
-        </app-work-experience>
+                        <app-work-experience 
+                            *ngIf="currentSection === 'workExperience'"
+                            [workExperienceForm]="form"
+                            [formArray]="workExperiences"
+                            (addWorkExperience)="addWorkExperience()"
+                            (removeWorkExperience)="removeWorkExperience($event)"
+                            (saveWorkExperience)="onSaveWorkExperience()">
+                        </app-work-experience>
 
-        <app-education-details 
-        *ngIf="currentSection === 'education'"
-        [formArray]="educationDetails"
-        (addEducation) = "addEducation()"
-        (removeEducation) = "removeEducation($event)">
-        </app-education-details>
-         
-        <!-- <button *ngIf="currentSection ==='workExperience'" type="button" class="btn btn-danger" (click)="removeWorkExperience(i)">Remove</button> -->
-        <button *ngIf="currentSection === 'workExperience'" type="button" class="btn btn-secondary" (click)="addWorkExperience()">Add Work Experience</button>
+                        <app-education-details 
+                            *ngIf="currentSection === 'education'"
+                            [educationDetailsForm]="form"
+                            [formArray]="educationDetails"
+                            (addEducation)="addEducation()"
+                            (removeEducation)="removeEducation($event)">
+                        </app-education-details>
+                    </div>
 
-      
+                    <!-- Builder Actions (Optional Global Actions) -->
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <button class="btn btn-light rounded-pill px-4" (click)="showSection('personalDetails')" *ngIf="currentSection !== 'personalDetails'">
+                          Back
+                        </button>
+                        <div class="ms-auto">
+                            <button *ngIf="currentSection === 'workExperience'" type="button" class="btn btn-outline-primary rounded-pill px-4 me-3" (click)="addWorkExperience()">
+                                + Add Experience
+                            </button>
+                            <!-- Final Submit could go here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
       </main>
     </div>
-  </div>
-  
+</div>
