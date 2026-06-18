@@ -6,11 +6,11 @@
       </div>
   
       <!-- Main Form Section -->
-      <main class="col-md-9 col-lg-10 main-scroll-area bg-subtle">
-        <div class="container-fluid py-5 px-md-5">
+      <main class="col-md-5 col-lg-5 main-scroll-area bg-subtle border-end">
+        <div class="container-fluid py-5 px-md-4">
             <div class="row justify-content-center">
-                <div class="col-xl-9 animate-fade-in">
-                    <div class="modern-card p-4 p-md-5 mb-4 shadow-xl border-0">
+                <div class="col-12 animate-fade-in">
+                    <div class="modern-card p-4 mb-4 shadow-xl border-0">
                         @if (currentSection() === 'personalDetails') {
                             <app-personal-details
                                 [personalDetailsForm]="personalDetails"
@@ -46,19 +46,19 @@
                         } @else {
                             <div></div>
                         }
-                        <div class="ms-auto d-flex gap-3">
+                        <div class="ms-auto d-flex gap-2">
                             @if (currentSection() === 'workExperience') {
-                                <button type="button" class="btn btn-outline-primary rounded-pill px-4 fw-semibold" (click)="addWorkExperience()">
-                                    + Add Experience
+                                <button type="button" class="btn btn-outline-primary rounded-pill px-3 fw-semibold small" (click)="addWorkExperience()">
+                                    + Add
                                 </button>
                             }
                             @if (currentSection() === 'education') {
-                                <button type="button" class="btn btn-outline-primary rounded-pill px-4 fw-semibold" (click)="addEducation()">
-                                    + Add Education
+                                <button type="button" class="btn btn-outline-primary rounded-pill px-3 fw-semibold small" (click)="addEducation()">
+                                    + Add
                                 </button>
                             }
-                            <button type="button" class="btn-vibrant px-5 shadow-lg" (click)="submitResume()" [disabled]="isSaving()">
-                                {{ isSaving() ? 'Saving...' : 'Save Complete Resume' }}
+                            <button type="button" class="btn-vibrant px-4 shadow-lg fw-bold" (click)="submitResume()" [disabled]="isSaving()">
+                                {{ isSaving() ? 'Saving...' : 'Save Resume' }}
                             </button>
                         </div>
                     </div>
@@ -66,5 +66,16 @@
             </div>
         </div>
       </main>
+
+      <!-- Live Preview Section -->
+      <aside class="col-md-4 col-lg-5 main-scroll-area bg-white">
+        <div class="preview-sticky-wrapper p-4 p-lg-5">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <h5 class="text-uppercase fw-bold text-muted small mb-0 tracking-widest">Live Preview</h5>
+            <span class="badge bg-success-subtle text-success rounded-pill px-3">Syncing...</span>
+          </div>
+          <app-preview [resume]="resumeSignal() || form.value" />
+        </div>
+      </aside>
     </div>
 </div>

@@ -1,9 +1,11 @@
-import { Component, OnInit, signal, ChangeDetectionStrategy, computed, inject } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy, computed, inject, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PersonalDetailsComponent } from '../personal-details/personal-details.component';
 import { WorkExperienceComponent } from '../work-experience/work-experience.component';
 import { EducationDetailsComponent } from '../education-details/education-details.component';
 import { SectionsComponent } from '../sections/sections.component';
+import { PreviewComponent } from '../components/preview/preview.component';
 import {
   FormArray,
   FormBuilder,
@@ -27,6 +29,7 @@ import { ToastService } from '../services/toast.service';
     WorkExperienceComponent,
     EducationDetailsComponent,
     SectionsComponent,
+    PreviewComponent,
   ],
   templateUrl: './form.component.html',
   styleUrl: './form.component.css',
@@ -37,11 +40,15 @@ export class FormComponent implements OnInit {
   private resumeService = inject(ResumeService);
   private router = inject(Router);
   private toastService = inject(ToastService);
+  private destroyRef = inject(DestroyRef);
 
   form!: FormGroup;
   currentSection = signal<string>('personalDetails');
   isSaving = signal<boolean>(false);
   completionPercentage = signal<number>(0);
+
+  // Use a writable signal for the resume data
+  resumeSignal = signal<Resume | null>(null);
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -56,14 +63,20 @@ export class FormComponent implements OnInit {
       educationDetails: this.fb.array([]), 
     });
 
+    // Initialize the signal with the current form value
+    this.resumeSignal.set(this.form.value);
+
+    // Update the signal reactively on form changes
+    this.form.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
+      this.resumeSignal.set(value);
+      this.calculateProgress();
+    });
+
     const resumeData = history.state?.resume;
     if (resumeData) {
       this.populateForm(resumeData);
     }
 
-    this.form.valueChanges.subscribe(() => {
-        this.calculateProgress();
-    });
     this.calculateProgress();
   }
 
@@ -73,7 +86,6 @@ export class FormComponent implements OnInit {
 
     if (this.personalDetails.valid) completedSections++;
     // Consider arrays valid if they have at least one valid entry, or if empty (optional section)
-    // Adjust logic if they are strictly required. Assuming at least 1 valid entry is needed for 'complete'
     if (this.workExperiences.length > 0 && this.workExperiences.valid) completedSections++;
     else if (this.workExperiences.length === 0) totalSections--; // Optional section
 
