@@ -72,7 +72,17 @@
         <div class="preview-sticky-wrapper p-4 p-lg-5">
           <div class="d-flex align-items-center justify-content-between mb-4">
             <h5 class="text-uppercase fw-bold text-muted small mb-0 tracking-widest">Live Preview</h5>
-            <span class="badge bg-success-subtle text-success rounded-pill px-3">Syncing...</span>
+            <div class="d-flex gap-2 align-items-center">
+                <button class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" (click)="downloadPdf()" [disabled]="isExporting()">
+                    @if (isExporting()) {
+                        <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                    } @else {
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    }
+                    PDF
+                </button>
+                <span class="badge bg-success-subtle text-success rounded-pill px-3">Syncing...</span>
+            </div>
           </div>
           <app-preview [resume]="resumeSignal() || form.value" />
         </div>

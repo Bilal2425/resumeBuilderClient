@@ -49,7 +49,12 @@ export class AuthService {
   //Check if user is authentiicated
   isAuthenticated(){
     const token = this.getToken();
-    return token != null && !this.jwtHelper.isTokenExpired(token);
+    if (!token) return false;
+    try {
+      return !this.jwtHelper.isTokenExpired(token);
+    } catch (e) {
+      return false;
+    }
   }
 
   //Set headers with token for autenticated requests

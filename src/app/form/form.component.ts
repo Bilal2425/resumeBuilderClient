@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, ChangeDetectionStrategy, computed, inject, DestroyRef } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy, computed, inject, DestroyRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PersonalDetailsComponent } from '../personal-details/personal-details.component';
@@ -17,6 +17,7 @@ import { Resume } from '../models/resume';
 import { ResumeService } from '../services/resume.service';
 import { Router } from '@angular/router';
 import { ToastService } from '../services/toast.service';
+import { ExportService } from '../services/export.service';
 
 
 @Component({
@@ -41,10 +42,14 @@ export class FormComponent implements OnInit {
   private router = inject(Router);
   private toastService = inject(ToastService);
   private destroyRef = inject(DestroyRef);
+  private exportService = inject(ExportService);
+
+  @ViewChild(PreviewComponent) previewComponent!: PreviewComponent;
 
   form!: FormGroup;
   currentSection = signal<string>('personalDetails');
   isSaving = signal<boolean>(false);
+  isExporting = signal<boolean>(false);
   completionPercentage = signal<number>(0);
 
   // Use a writable signal for the resume data
@@ -220,4 +225,22 @@ export class FormComponent implements OnInit {
       this.form.markAllAsTouched();
     }
   }
+
+  async downloadPdf() {
+    if (this.previewComponent) {
+      try {
+        this.isExporting.set(true);
+        const element = this.previewComponent.resumePreview.nativeElement;
+        const fileName = `${this.form.value.personalDetails.firstName || 'My'}_${this.form.value.personalDetails.lastName || 'Resume'}.pdf`;
+        await this.exportService.exportToPdf(element, fileName);
+        this.toastService.success('Resume downloaded successfully!');
+      } catch (error) {
+        console.error('Export failed', error);
+        this.toastService.error('Failed to export PDF. Please try again.');
+      } finally {
+        this.isExporting.set(false);
+      }
+    }
+  }
 }
+

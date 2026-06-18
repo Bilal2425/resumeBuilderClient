@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Resume } from '../../models/resume';
 
@@ -7,7 +7,7 @@ import { Resume } from '../../models/resume';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="preview-paper modern-card shadow-xl animate-fade-in">
+    <div #resumePreview class="preview-paper modern-card shadow-xl animate-fade-in">
       <!-- Header / Personal Details -->
       <header class="preview-header mb-5 border-bottom pb-4 text-center">
         <h1 class="display-6 fw-bold text-gradient mb-1">
@@ -97,4 +97,5 @@ import { Resume } from '../../models/resume';
 })
 export class PreviewComponent {
   resume = input<Resume | null>();
+  @ViewChild('resumePreview') resumePreview!: ElementRef<HTMLElement>;
 }
