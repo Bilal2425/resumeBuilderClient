@@ -23,11 +23,11 @@ export const appConfig: ApplicationConfig = {
       {
         config: {
           tokenGetter: tokenGetter,
-          allowedDomains: ['localhost:7216'],
-          disallowedRoutes:[
-            'https://localhost:7216/api/User/login',
-            'https://localhost:7216/api/User/register'
-          ]
+          allowedDomains: ['localhost:5133'],
+          disallowedRoutes: [
+            'http://localhost:5133/api/User/login',
+            'http://localhost:5133/api/User/register'
+          ],
         }
 
       }

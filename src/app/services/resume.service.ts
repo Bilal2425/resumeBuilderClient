@@ -7,7 +7,7 @@ import { Resume } from '../models/resume';
   providedIn: 'root'
 })
 export class ResumeService {
-  private apiUrl = 'https://localhost:7216/api/Resume'; // Adjust base URL as needed
+  private apiUrl = 'http://localhost:5133/api/Resume'; // Adjust base URL as needed
 
   constructor(private http: HttpClient) { }
 
