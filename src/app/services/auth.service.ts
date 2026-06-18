@@ -9,7 +9,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 })
 export class AuthService {
 
-  private baseUrl = 'http://localhost:5133/api/User'; // Adjust according to your backend API
+  private baseUrl = 'https://localhost:7216/api/User'; // Adjust according to your backend API
   private jwtHelper = new JwtHelperService();
 
   constructor(private http: HttpClient) { }
@@ -69,7 +69,7 @@ export class AuthService {
   getProtectedData() : Observable<any> {
     const headers = new HttpHeaders();
     const authHeaders = this.createAuthorizationHeader(headers);
-    return this.http.get('http://localhost:5133/api/protected', { headers: authHeaders});
+    return this.http.get('https://localhost:7216/api/protected', { headers: authHeaders});
   }
   
   //logout user
