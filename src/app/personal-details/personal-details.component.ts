@@ -49,8 +49,7 @@ export class PersonalDetailsComponent {
       );
 
       //saving to local storage
-      localStorage.setItem('personalDetails', JSON.stringify(personalDetails));
-      console.log('Personal Details saved to local storage:', personalDetails);
+
 
       
      
