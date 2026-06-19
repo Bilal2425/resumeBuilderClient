@@ -200,8 +200,9 @@ export class FormComponent implements OnInit {
       this.form.get('personalDetails')?.patchValue(resumeData.personalDetails);
     }
 
+    const workExperienceArray = this.form.get('workExperiences') as FormArray;
+    workExperienceArray.clear(); // Clear existing entries
     if (resumeData.workExperiences && resumeData.workExperiences.length > 0) {
-      const workExperienceArray = this.form.get('workExperiences') as FormArray;
       resumeData.workExperiences.forEach(experience => {
         workExperienceArray.push(
           this.fb.group({
@@ -216,8 +217,9 @@ export class FormComponent implements OnInit {
       });
     }
 
+    const educationArray = this.form.get('educationDetails') as FormArray;
+    educationArray.clear(); // Clear existing entries
     if (resumeData.educations && resumeData.educations.length > 0) {
-      const educationArray = this.form.get('educationDetails') as FormArray;
       resumeData.educations.forEach(education => {
         educationArray.push(
           this.fb.group({
