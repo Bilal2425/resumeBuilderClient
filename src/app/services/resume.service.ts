@@ -15,11 +15,7 @@ export class ResumeService {
     return this.http.post<any>(this.apiUrl, resume);
   }
 
-  getResumes(): Observable<Resume[]> {
-    return this.http.get<Resume[]>(this.apiUrl);
-  }
-
-  getResumeById(id: string): Observable<Resume> {
-    return this.http.get<Resume>(`${this.apiUrl}/${id}`);
+  getCurrentUserResume(): Observable<Resume> {
+    return this.http.get<Resume>(this.apiUrl);
   }
 }

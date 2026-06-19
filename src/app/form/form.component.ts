@@ -82,13 +82,30 @@ export class FormComponent implements OnInit {
       this.calculateProgress();
     });
 
-    const resumeData = history.state?.resume;
-    if (resumeData) {
-      if (resumeData.id) {
-        this.resumeId.set(resumeData.id);
-      }
-      this.populateForm(resumeData);
+    const resumeDataFromHistory = history.state?.resume;
+    if (resumeDataFromHistory && resumeDataFromHistory.id) {
+      this.resumeId.set(resumeDataFromHistory.id);
     }
+    
+    // Always fetch the current user's resume when the form component loads
+    this.resumeService.getCurrentUserResume().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (fullResume) => {
+        this.populateForm(fullResume);
+        if (fullResume.id) {
+          this.resumeId.set(fullResume.id); // Set resumeId from fetched data
+        }
+      },
+      error: (error) => {
+        // If 404, it means no resume exists yet for this user.
+        // In this case, simply populate with any data from history.state
+        if (error.status === 404 && resumeDataFromHistory) {
+          this.populateForm(resumeDataFromHistory);
+        } else {
+          this.toastService.error('Error loading resume. Please try again.');
+          console.error('Error loading resume:', error);
+        }
+      }
+    });
 
     this.calculateProgress();
   }
