@@ -35,6 +35,15 @@
                                 (removeEducation)="removeEducation($event)">
                             </app-education-details>
                         }
+
+                        @if (currentSection() === 'skills') {
+                            <app-skills-achievements
+                                [skillsForm]="form"
+                                [formArray]="skills"
+                                (addSkill)="addSkill()"
+                                (removeSkill)="removeSkill($event)">
+                            </app-skills-achievements>
+                        }
                     </div>
 
                     <!-- Builder Actions (Optional Global Actions) -->
@@ -57,6 +66,14 @@
                             }
                             @if (currentSection() === 'education') {
                                 <button type="button" class="btn btn-outline-primary rounded-pill px-3 fw-semibold small" (click)="addEducation()">
+                                    + Add
+                                </button>
+                                <button type="button" class="btn-vibrant px-4 shadow-lg fw-bold" (click)="goNext()">
+                                    Next
+                                </button>
+                            }
+                            @if (currentSection() === 'skills') {
+                                <button type="button" class="btn btn-outline-primary rounded-pill px-3 fw-semibold small" (click)="addSkill()">
                                     + Add
                                 </button>
                                 <button type="button" class="btn-vibrant px-4 shadow-lg fw-bold" (click)="submitResume()" [disabled]="isSaving()">

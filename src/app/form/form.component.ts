@@ -4,6 +4,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PersonalDetailsComponent } from '../personal-details/personal-details.component';
 import { WorkExperienceComponent } from '../work-experience/work-experience.component';
 import { EducationDetailsComponent } from '../education-details/education-details.component';
+import { SkillsAchievementsComponent } from '../skills-achievements/skills-achievements.component';
 import { SectionsComponent } from '../sections/sections.component';
 import { PreviewComponent } from '../components/preview/preview.component';
 import {
@@ -18,6 +19,7 @@ import { ResumeService } from '../services/resume.service';
 import { Router } from '@angular/router';
 import { ToastService } from '../services/toast.service';
 import { ExportService } from '../services/export.service';
+import { Skill } from '../models/skill';
 
 
 @Component({
@@ -31,6 +33,7 @@ import { ExportService } from '../services/export.service';
     EducationDetailsComponent,
     SectionsComponent,
     PreviewComponent,
+    SkillsAchievementsComponent,
   ],
   templateUrl: './form.component.html',
   styleUrl: './form.component.css',
@@ -65,8 +68,9 @@ export class FormComponent implements OnInit {
         phoneNumber: ['', Validators.required],
         location: ['', Validators.required],
       }),
-      workExperiences: this.fb.array([]), 
-      educationDetails: this.fb.array([]), 
+      workExperiences: this.fb.array([]),
+      educationDetails: this.fb.array([]),
+      skills: this.fb.array([]), // Add skills FormArray
     });
 
     // Initialize the signal with the current form value properly mapped
@@ -94,22 +98,25 @@ export class FormComponent implements OnInit {
       id: this.resumeId() || undefined,
       personalDetails: formValue.personalDetails,
       workExperiences: formValue.workExperiences || [],
-      educations: formValue.educationDetails || []
+      educations: formValue.educationDetails || [],
+      skills: formValue.skills || [] // Include skills
     };
     this.resumeSignal.set(mappedResume);
   }
 
   calculateProgress() {
     let completedSections = 0;
-    let totalSections = 3; // Personal, Work, Education
+    let totalSections = 4; // Personal, Work, Education, Skills
 
     if (this.personalDetails.valid) completedSections++;
-    // Consider arrays valid if they have at least one valid entry, or if empty (optional section)
     if (this.workExperiences.length > 0 && this.workExperiences.valid) completedSections++;
-    else if (this.workExperiences.length === 0) totalSections--; // Optional section
+    else if (this.workExperiences.length === 0) totalSections--;
 
     if (this.educationDetails.length > 0 && this.educationDetails.valid) completedSections++;
     else if (this.educationDetails.length === 0) totalSections--;
+
+    if (this.skills.length > 0 && this.skills.valid) completedSections++;
+    else if (this.skills.length === 0) totalSections--;
 
     const percentage = totalSections === 0 ? 100 : Math.round((completedSections / totalSections) * 100);
     this.completionPercentage.set(percentage);
@@ -132,6 +139,8 @@ export class FormComponent implements OnInit {
       this.showSection('workExperience');
     } else if (this.currentSection() === 'workExperience') {
       this.showSection('education');
+    } else if (this.currentSection() === 'education') {
+      this.showSection('skills');
     }
   }
 
@@ -140,6 +149,8 @@ export class FormComponent implements OnInit {
       this.showSection('personalDetails');
     } else if (this.currentSection() === 'education') {
       this.showSection('workExperience');
+    } else if (this.currentSection() === 'skills') {
+      this.showSection('education');
     }
   }
 
@@ -195,6 +206,28 @@ export class FormComponent implements OnInit {
     this.calculateProgress();
   }
 
+  // New methods for Skills
+  createSkill(): FormGroup {
+    return this.fb.group({
+      name: ['', Validators.required],
+      level: ['', Validators.required],
+    });
+  }
+
+  get skills(): FormArray {
+    return this.form.get('skills') as FormArray;
+  }
+
+  addSkill() {
+    this.skills.push(this.createSkill());
+    this.calculateProgress();
+  }
+
+  removeSkill(index: number) {
+    this.skills.removeAt(index);
+    this.calculateProgress();
+  }
+
   populateForm(resumeData: Resume): void {
     if (resumeData.personalDetails) {
       this.form.get('personalDetails')?.patchValue(resumeData.personalDetails);
@@ -230,6 +263,19 @@ export class FormComponent implements OnInit {
             endDate: [education.endDate, Validators.required],
             location: [education.location, Validators.required],
             gpa: [education.gpa, Validators.required],
+          })
+        );
+      });
+    }
+
+    const skillsArray = this.form.get('skills') as FormArray;
+    skillsArray.clear(); // Clear existing entries
+    if (resumeData.skills && resumeData.skills.length > 0) {
+      resumeData.skills.forEach(skill => {
+        skillsArray.push(
+          this.fb.group({
+            name: [skill.name, Validators.required],
+            level: [skill.level, Validators.required],
           })
         );
       });

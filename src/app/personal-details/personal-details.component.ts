@@ -39,7 +39,7 @@ export class PersonalDetailsComponent {
       this.personalDetailsService.savePersonalDetails(personalDetails).subscribe(
 
         (response: any) => {
-          console.log('Personal Details saved successfully:', response);
+
           //Emit the event to notify parent component
           this.nextSection.emit();
         },
@@ -57,9 +57,10 @@ export class PersonalDetailsComponent {
     }
     else
     {
-      console.log('Form is not valid');
+
     }
   }
   
 
 }
+

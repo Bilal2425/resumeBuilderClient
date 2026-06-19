@@ -1,0 +1,65 @@
+<div class="form-section">
+  <div class="d-flex align-items-center mb-5">
+    <div class="section-icon me-3">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 8.23a2.18 2.18 0 0 0-3.86 0L12 16.5l-4.98-8.27a2.18 2.18 0 0 0-3.86 0L1 10.74l11 11 11-11-2.16-2.51z"></path></svg>
+    </div>
+    <h2 class="mb-0 text-gradient">Skills & Achievements</h2>
+  </div>
+
+  @if (formArray() && formArray().controls.length > 0) {
+    <div [formGroup]="skillsForm()">
+      <div formArrayName="skills">
+        @for (skill of formArray().controls; track i; let i = $index) {
+          <div [formGroupName]="i" class="experience-item modern-card p-4 mb-4 bg-light-subtle">
+            <div class="d-flex justify-content-between align-items-start mb-4">
+              <div class="d-flex align-items-center">
+                <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2 me-3">Skill #{{ i + 1 }}</span>
+              </div>
+              <button type="button" class="btn btn-sm btn-outline-danger border-0 rounded-circle p-2" (click)="onRemoveSkill(i)" title="Remove Entry">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+              </button>
+            </div>
+
+            <div class="row g-4">
+              <div class="col-md-6">
+                <label class="form-label">Skill Name</label>
+                <input type="text" class="form-control" [class.is-invalid]="skill.get('name')?.invalid && skill.get('name')?.touched" formControlName="name" placeholder="e.g. JavaScript">
+                @if (skill.get('name')?.invalid && skill.get('name')?.touched) {
+                  <div class="invalid-feedback">Skill name is required.</div>
+                }
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Proficiency Level</label>
+                <select class="form-select" [class.is-invalid]="skill.get('level')?.invalid && skill.get('level')?.touched" formControlName="level">
+                  <option value="">Select Level</option>
+                  <option value="Beginner">Beginner</option>
+                  <option value="Intermediate">Intermediate</option>
+                  <option value="Advanced">Advanced</option>
+                  <option value="Expert">Expert</option>
+                </select>
+                @if (skill.get('level')?.invalid && skill.get('level')?.touched) {
+                  <div class="invalid-feedback">Proficiency level is required.</div>
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  } @else {
+    <div class="text-center py-5 bg-subtle rounded-4 border-dashed mb-4">
+      <div class="mb-3 text-muted opacity-50">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 8.23a2.18 2.18 0 0 0-3.86 0L12 16.5l-4.98-8.27a2.18 2.18 0 0 0-3.86 0L1 10.74l11 11 11-11-2.16-2.51z"></path></svg>
+      </div>
+      <p class="text-muted fw-medium">No skills added yet.</p>
+      <p class="small text-muted">Highlight your key abilities.</p>
+    </div>
+  }
+
+  <div class="mt-4">
+    <button type="button" class="btn btn-outline-primary w-100 py-3 border-2 rounded-pill fw-bold d-flex align-items-center justify-content-center gap-2" (click)="onAddSkill()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+      Add Skill
+    </button>
+  </div>
+</div>

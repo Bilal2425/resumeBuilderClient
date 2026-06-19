@@ -46,7 +46,7 @@ import { Resume } from '../../models/resume';
       </section>
 
       <!-- Education Section -->
-      <section>
+      <section class="mb-5">
         <h3 class="section-title text-uppercase mb-3 small fw-bold tracking-widest text-primary border-bottom border-2 border-primary-subtle pb-1">Education</h3>
         @if (resume()?.educations?.length) {
           @for (edu of resume()?.educations; track $index) {
@@ -63,6 +63,20 @@ import { Resume } from '../../models/resume';
           }
         } @else {
           <p class="text-muted small fst-italic">Add your education details to see them here...</p>
+        }
+      </section>
+
+      <!-- Skills Section -->
+      <section>
+        <h3 class="section-title text-uppercase mb-3 small fw-bold tracking-widest text-primary border-bottom border-2 border-primary-subtle pb-1">Skills & Achievements</h3>
+        @if (resume()?.skills?.length) {
+            <div class="d-flex flex-wrap gap-2">
+                @for (skill of resume()?.skills; track $index) {
+                    <span class="badge bg-secondary-subtle text-secondary py-2 px-3 rounded-pill">{{ skill.name }} ({{ skill.level }})</span>
+                }
+            </div>
+        } @else {
+          <p class="text-muted small fst-italic">Add your skills to see them here...</p>
         }
       </section>
     </div>
