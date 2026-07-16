@@ -1,22 +1,101 @@
 <div class="container py-5 animate-fade-in">
   <div class="row justify-content-center">
-    <div class="col-lg-8">
-      <div class="welcome-card modern-card text-center p-5">
+    <div class="col-lg-10">
+      
+      <!-- Welcome Hero Card -->
+      <div class="welcome-card modern-card text-center p-5 mb-5 border-0 shadow-lg">
         <div class="hero-icon mb-4">
           <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
         </div>
         <h1 class="display-5 fw-bold mb-3">Welcome to <span class="text-gradient">ResumeCraft</span></h1>
-        <p class="lead text-muted mb-5">Create a professional, high-impact resume in minutes with our intuitive builder.</p>
-        
-        <div class="cta-actions">
-          <button class="btn-vibrant btn-lg px-5 py-3 shadow-lg" (click)="buildResume()">
-            <span class="d-flex align-items-center justify-content-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-              Build Your Resume
-            </span>
-          </button>
+        <p class="lead text-muted mb-0">Create a professional, high-impact resume in minutes with our intuitive builder or let AI extract details from your existing resume.</p>
+      </div>
+
+      <!-- Action Cards Grid -->
+      <div class="row g-4">
+        <!-- Card 1: Build from Scratch / Edit -->
+        <div class="col-md-6">
+          <div class="action-card modern-card p-5 h-100 d-flex flex-column align-items-center text-center justify-content-between">
+            <div>
+              <div class="action-icon mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-500"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+              </div>
+              <h3 class="fw-bold mb-3">{{ resumeData ? 'Edit Your Resume' : 'Build from Scratch' }}</h3>
+              <p class="text-muted mb-4">
+                {{ resumeData ? 'Continue editing and refining your existing resume details.' : 'Start fresh and build your resume section by section with live previews.' }}
+              </p>
+            </div>
+            <button class="btn-vibrant w-100 py-3 shadow" (click)="buildResume()">
+              {{ resumeData ? 'Edit Resume' : 'Start Building' }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 2: AI Import -->
+        <div class="col-md-6">
+          <div class="action-card modern-card p-5 h-100 d-flex flex-column align-items-center text-center justify-content-between"
+               [class.dragging]="isDragging()"
+               (dragover)="onDragOver($event)"
+               (dragleave)="onDragLeave($event)"
+               (drop)="onDrop($event)">
+            
+            <div class="w-100">
+              <div class="action-icon mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-emerald-500"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              </div>
+              <h3 class="fw-bold mb-3">Import with AI</h3>
+              <p class="text-muted mb-3">Upload your existing PDF or Word resume. Our Gemini AI will parse the details and populate the builder sections automatically.</p>
+              
+              <!-- AI Scope Notification -->
+              <div class="alert alert-warning py-2 px-3 small rounded-3 mb-4 text-start d-flex align-items-start gap-2 border-0" style="background-color: rgba(245, 158, 11, 0.1); color: #b45309;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="mt-1 flex-shrink-0" style="color: #d97706;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                <div>
+                  <strong>AI Scope:</strong> Auto-populates Contact Info, Experience, Education, and Certifications. <em>Skills and social/portfolio links are left for manual entry.</em>
+                </div>
+              </div>
+              
+              <!-- Drag and Drop Area -->
+              <div class="upload-zone p-4 mb-4 border-dashed rounded-4 d-flex flex-column align-items-center justify-content-center"
+                   (click)="fileInput.click()">
+                @if (isParsing()) {
+                  <div class="spinner-border text-primary mb-3" role="status"></div>
+                  <span class="fw-bold text-primary">Parsing your resume...</span>
+                  <span class="text-muted small mt-1">This takes about 5-10 seconds</span>
+                } @else {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-muted mb-2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                  <span class="small fw-semibold text-muted">Click or drag &amp; drop file here</span>
+                  <span class="text-light" style="font-size: 0.75rem;">Supports PDF and DOCX</span>
+                }
+                <input #fileInput type="file" (change)="onFileSelected($event)" accept=".pdf,.docx" class="d-none">
+              </div>
+            </div>
+            <button class="btn btn-outline-success w-100 py-3 rounded-pill fw-bold border-2" (click)="fileInput.click()" [disabled]="isParsing()">
+              Select Resume File
+            </button>
+          </div>
         </div>
       </div>
+
+      <!-- Card 3: Markdown Editor -->
+      <div class="row g-4 mt-2">
+        <div class="col-12 animate-fade-in">
+          <div class="action-card modern-card p-4 d-flex align-items-center justify-content-between border-0 shadow">
+            <div class="d-flex align-items-center">
+              <div class="action-icon me-4" style="background-color: rgba(147, 51, 234, 0.1); color: rgb(147, 51, 234); border-radius: 12px; padding: 12px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+              </div>
+              <div class="text-start">
+                <h4 class="fw-bold mb-1">Markdown Resume Editor</h4>
+                <p class="text-muted mb-0 small">Write your resume using simple Markdown formatting. Fast, precise, and starting with a clean ATS template.</p>
+              </div>
+            </div>
+            <button class="btn-vibrant px-4 py-2 shadow-sm rounded-pill fw-bold" (click)="openMarkdownEditor()">
+              Open Editor
+            </button>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>

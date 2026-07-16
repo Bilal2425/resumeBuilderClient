@@ -3,13 +3,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { UserLogin, UserRegister } from '../models/user.model';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { getApiUrl } from '../config/api-config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private baseUrl = 'https://localhost:7216/api/User'; // Adjust according to your backend API
+  private baseUrl = getApiUrl('User'); // Dynamically resolved backend URL
   private jwtHelper = new JwtHelperService();
 
   constructor(private http: HttpClient) { }
@@ -69,12 +70,33 @@ export class AuthService {
   getProtectedData() : Observable<any> {
     const headers = new HttpHeaders();
     const authHeaders = this.createAuthorizationHeader(headers);
-    return this.http.get('https://localhost:7216/api/protected', { headers: authHeaders});
+    return this.http.get(getApiUrl('protected'), { headers: authHeaders});
   }
   
   //logout user
   logout(): void {
     localStorage.removeItem('jwtToken');
+  }
+
+  // Forgot password — returns token in dev mode
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/forgot-password`, { email }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  // Reset password with token
+  resetPassword(token: string, newPassword: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/reset-password`, { token, newPassword }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  // Google OAuth login
+  googleLogin(credential: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/google-login`, { credential }).pipe(
+      catchError(this.handleError)
+    );
   }
 
   //Error handling method

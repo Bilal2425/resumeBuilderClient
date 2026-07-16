@@ -55,6 +55,31 @@
             </div>
         </div>
 
+        <!-- Portfolio Links -->
+        <div class="mt-4 mb-2">
+            <h6 class="text-muted fw-semibold d-flex align-items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                Portfolio Links <span class="badge bg-light text-muted fw-normal" style="font-size: 0.7rem;">Optional</span>
+            </h6>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <label for="linkedIn" class="form-label">LinkedIn</label>
+                <input type="url" id="linkedIn" class="form-control" 
+                       formControlName="linkedIn" placeholder="https://linkedin.com/in/yourprofile">
+            </div>
+            <div class="col-md-4">
+                <label for="github" class="form-label">GitHub</label>
+                <input type="url" id="github" class="form-control" 
+                       formControlName="github" placeholder="https://github.com/yourusername">
+            </div>
+            <div class="col-md-4">
+                <label for="portfolio" class="form-label">Portfolio</label>
+                <input type="url" id="portfolio" class="form-control" 
+                       formControlName="portfolio" placeholder="https://yourportfolio.com">
+            </div>
+        </div>
+
         <div class="mt-5 d-flex justify-content-end">
             <button type="submit" class="btn-vibrant px-5">Save and Continue</button>
         </div>

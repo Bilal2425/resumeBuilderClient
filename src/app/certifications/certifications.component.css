@@ -1,0 +1,5 @@
+/* Certifications component inherits global styles */
+.input-group-text {
+  border-right: none;
+  color: var(--text-muted);
+}

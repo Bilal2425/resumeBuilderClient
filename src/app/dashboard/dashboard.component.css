@@ -1,36 +1,47 @@
-.welcome-card {
-  border: none;
-  background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
-  padding: 4rem !important;
-}
-
-.hero-icon {
-  display: inline-flex;
-  padding: 24px;
-  background: var(--bg-subtle);
-  border-radius: var(--radius-lg);
-  color: var(--primary);
-  margin-bottom: 2rem;
-}
-
 .hero-icon svg {
+  filter: drop-shadow(0 8px 16px rgba(79, 70, 229, 0.25));
+}
+
+.action-card {
+  transition: transform var(--transition-slow), border-color var(--transition-slow), box-shadow var(--transition-slow);
+}
+
+.action-card:hover {
+  transform: translateY(-8px);
+}
+
+.action-card.dragging {
+  border-color: var(--success) !important;
+  background: rgba(16, 185, 129, 0.04);
+}
+
+.upload-zone {
+  border: 2px dashed var(--border-light);
+  cursor: pointer;
+  background: var(--bg-light);
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.upload-zone:hover {
+  background: var(--bg-subtle);
+  border-color: var(--primary);
+}
+
+.action-icon {
+  width: 64px;
+  height: 64px;
+  background: var(--bg-subtle);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.text-indigo-500 {
   color: var(--primary);
 }
 
-h1 {
-  letter-spacing: -0.05em;
-  font-size: 3.5rem;
-}
-
-.lead {
-  font-size: 1.25rem;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.btn-vibrant.btn-lg {
-  padding: 1rem 3rem;
-  font-size: 1.125rem;
-  border-radius: var(--radius-full);
+.text-emerald-500 {
+  color: var(--success);
 }

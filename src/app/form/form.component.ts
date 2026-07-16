@@ -5,8 +5,10 @@ import { PersonalDetailsComponent } from '../personal-details/personal-details.c
 import { WorkExperienceComponent } from '../work-experience/work-experience.component';
 import { EducationDetailsComponent } from '../education-details/education-details.component';
 import { SkillsAchievementsComponent } from '../skills-achievements/skills-achievements.component';
+import { CertificationsComponent } from '../certifications/certifications.component';
 import { SectionsComponent } from '../sections/sections.component';
 import { PreviewComponent } from '../components/preview/preview.component';
+import { TemplatePickerComponent } from '../template-picker/template-picker.component';
 import {
   FormArray,
   FormBuilder,
@@ -14,13 +16,11 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Resume } from '../models/resume';
+import { ResumeData } from '../models/resume.model';
 import { ResumeService } from '../services/resume.service';
 import { Router } from '@angular/router';
 import { ToastService } from '../services/toast.service';
 import { ExportService } from '../services/export.service';
-import { Skill } from '../models/skill';
-
 
 @Component({
   selector: 'app-form',
@@ -34,6 +34,8 @@ import { Skill } from '../models/skill';
     SectionsComponent,
     PreviewComponent,
     SkillsAchievementsComponent,
+    CertificationsComponent,
+    TemplatePickerComponent,
   ],
   templateUrl: './form.component.html',
   styleUrl: './form.component.css',
@@ -55,9 +57,13 @@ export class FormComponent implements OnInit {
   isExporting = signal<boolean>(false);
   completionPercentage = signal<number>(0);
   resumeId = signal<string | null>(null);
+  showTemplatePicker = signal<boolean>(false);
 
-  // Use a writable signal for the resume data
-  resumeSignal = signal<Resume | null>(null);
+  // Writable signal for the template selection
+  templateIdSignal = signal<string>('classic');
+
+  // Writable signal for the resume data
+  resumeSignal = signal<ResumeData | null>(null);
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -67,10 +73,15 @@ export class FormComponent implements OnInit {
         email: ['', [Validators.required, Validators.email]],
         phoneNumber: ['', Validators.required],
         location: ['', Validators.required],
+        linkedIn: [''],
+        github: [''],
+        portfolio: [''],
       }),
       workExperiences: this.fb.array([]),
       educationDetails: this.fb.array([]),
-      skills: this.fb.array([]), // Add skills FormArray
+      skills: this.fb.array([]),
+      certifications: this.fb.array([]),
+      templateId: ['classic']
     });
 
     // Initialize the signal with the current form value properly mapped
@@ -87,43 +98,53 @@ export class FormComponent implements OnInit {
       this.resumeId.set(resumeDataFromHistory.id);
     }
     
-    // Always fetch the current user's resume when the form component loads
-    this.resumeService.getCurrentUserResume().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (fullResume) => {
-        this.populateForm(fullResume);
-        if (fullResume.id) {
-          this.resumeId.set(fullResume.id); // Set resumeId from fetched data
+    // If user has newly parsed history state data, populate it and only fetch ID from DB
+    if (resumeDataFromHistory) {
+      this.populateForm(resumeDataFromHistory);
+      this.resumeService.getResume().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+        next: (fullResume) => {
+          if (fullResume.id) {
+            this.resumeId.set(fullResume.id);
+          }
         }
-      },
-      error: (error) => {
-        // If 404, it means no resume exists yet for this user.
-        // In this case, simply populate with any data from history.state
-        if (error.status === 404 && resumeDataFromHistory) {
-          this.populateForm(resumeDataFromHistory);
-        } else {
-          this.toastService.error('Error loading resume. Please try again.');
-          console.error('Error loading resume:', error);
+      });
+    } else {
+      // Otherwise load standard resume from DB
+      this.resumeService.getResume().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+        next: (fullResume) => {
+          this.populateForm(fullResume);
+          if (fullResume.id) {
+            this.resumeId.set(fullResume.id);
+          }
+        },
+        error: (error) => {
+          if (error.status !== 404) {
+            this.toastService.error('Error loading resume. Please try again.');
+            console.error('Error loading resume:', error);
+          }
         }
-      }
-    });
+      });
+    }
 
     this.calculateProgress();
   }
 
   private updateResumeSignal(formValue: any) {
-    const mappedResume: Resume = {
+    const mappedResume: ResumeData = {
       id: this.resumeId() || undefined,
       personalDetails: formValue.personalDetails,
       workExperiences: formValue.workExperiences || [],
       educations: formValue.educationDetails || [],
-      skills: formValue.skills || [] // Include skills
+      skills: formValue.skills || [],
+      certifications: formValue.certifications || [],
+      templateId: this.templateIdSignal()
     };
     this.resumeSignal.set(mappedResume);
   }
 
   calculateProgress() {
     let completedSections = 0;
-    let totalSections = 4; // Personal, Work, Education, Skills
+    let totalSections = 5; // Personal, Work, Education, Skills, Certifications
 
     if (this.personalDetails.valid) completedSections++;
     if (this.workExperiences.length > 0 && this.workExperiences.valid) completedSections++;
@@ -134,6 +155,9 @@ export class FormComponent implements OnInit {
 
     if (this.skills.length > 0 && this.skills.valid) completedSections++;
     else if (this.skills.length === 0) totalSections--;
+
+    if (this.certifications.length > 0 && this.certifications.valid) completedSections++;
+    else if (this.certifications.length === 0) totalSections--;
 
     const percentage = totalSections === 0 ? 100 : Math.round((completedSections / totalSections) * 100);
     this.completionPercentage.set(percentage);
@@ -158,6 +182,8 @@ export class FormComponent implements OnInit {
       this.showSection('education');
     } else if (this.currentSection() === 'education') {
       this.showSection('skills');
+    } else if (this.currentSection() === 'skills') {
+      this.showSection('certifications');
     }
   }
 
@@ -168,6 +194,8 @@ export class FormComponent implements OnInit {
       this.showSection('workExperience');
     } else if (this.currentSection() === 'skills') {
       this.showSection('education');
+    } else if (this.currentSection() === 'certifications') {
+      this.showSection('skills');
     }
   }
 
@@ -196,7 +224,6 @@ export class FormComponent implements OnInit {
     this.calculateProgress();
   }
 
-
   createEducation(): FormGroup {
     return this.fb.group({
       collegeName: ['', Validators.required],
@@ -223,11 +250,10 @@ export class FormComponent implements OnInit {
     this.calculateProgress();
   }
 
-  // New methods for Skills
   createSkill(): FormGroup {
     return this.fb.group({
       name: ['', Validators.required],
-      level: ['', Validators.required],
+      level: [''],
     });
   }
 
@@ -245,13 +271,48 @@ export class FormComponent implements OnInit {
     this.calculateProgress();
   }
 
-  populateForm(resumeData: Resume): void {
+  // Certifications Form Handling
+  createCertification(): FormGroup {
+    return this.fb.group({
+      name: ['', Validators.required],
+      issuingOrganization: ['', Validators.required],
+      issueDate: [''],
+      verificationUrl: ['']
+    });
+  }
+
+  get certifications(): FormArray {
+    return this.form.get('certifications') as FormArray;
+  }
+
+  addCertification() {
+    this.certifications.push(this.createCertification());
+    this.calculateProgress();
+  }
+
+  removeCertification(index: number) {
+    this.certifications.removeAt(index);
+    this.calculateProgress();
+  }
+
+  selectTemplate(tmplId: string) {
+    this.templateIdSignal.set(tmplId);
+    this.form.get('templateId')?.setValue(tmplId);
+    this.updateResumeSignal(this.form.value);
+  }
+
+  populateForm(resumeData: ResumeData): void {
     if (resumeData.personalDetails) {
       this.form.get('personalDetails')?.patchValue(resumeData.personalDetails);
     }
 
+    if (resumeData.templateId) {
+      this.templateIdSignal.set(resumeData.templateId);
+      this.form.get('templateId')?.setValue(resumeData.templateId);
+    }
+
     const workExperienceArray = this.form.get('workExperiences') as FormArray;
-    workExperienceArray.clear(); // Clear existing entries
+    workExperienceArray.clear();
     if (resumeData.workExperiences && resumeData.workExperiences.length > 0) {
       resumeData.workExperiences.forEach(experience => {
         workExperienceArray.push(
@@ -268,7 +329,7 @@ export class FormComponent implements OnInit {
     }
 
     const educationArray = this.form.get('educationDetails') as FormArray;
-    educationArray.clear(); // Clear existing entries
+    educationArray.clear();
     if (resumeData.educations && resumeData.educations.length > 0) {
       resumeData.educations.forEach(education => {
         educationArray.push(
@@ -286,13 +347,28 @@ export class FormComponent implements OnInit {
     }
 
     const skillsArray = this.form.get('skills') as FormArray;
-    skillsArray.clear(); // Clear existing entries
+    skillsArray.clear();
     if (resumeData.skills && resumeData.skills.length > 0) {
       resumeData.skills.forEach(skill => {
         skillsArray.push(
           this.fb.group({
             name: [skill.name, Validators.required],
-            level: [skill.level, Validators.required],
+            level: [skill.level || ''],
+          })
+        );
+      });
+    }
+
+    const certificationsArray = this.form.get('certifications') as FormArray;
+    certificationsArray.clear();
+    if (resumeData.certifications && resumeData.certifications.length > 0) {
+      resumeData.certifications.forEach(cert => {
+        certificationsArray.push(
+          this.fb.group({
+            name: [cert.name, Validators.required],
+            issuingOrganization: [cert.issuingOrganization, Validators.required],
+            issueDate: [cert.issueDate || ''],
+            verificationUrl: [cert.verificationUrl || '']
           })
         );
       });
@@ -302,10 +378,10 @@ export class FormComponent implements OnInit {
   submitResume() {
     if (this.form.valid) {
       this.isSaving.set(true);
-      const resumeData: Resume = this.resumeSignal()!;
+      const resumeData: ResumeData = this.resumeSignal()!;
       
       this.resumeService.saveResume(resumeData).subscribe({
-        next: (response) => {
+        next: () => {
           this.toastService.success('Resume saved successfully!');
           this.isSaving.set(false);
           this.router.navigate(['/dashboard']);
@@ -338,4 +414,3 @@ export class FormComponent implements OnInit {
     }
   }
 }
-

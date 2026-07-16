@@ -1,158 +1,435 @@
-/* Global Styles - Vibrant & Modern Theme */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+/* ===========================
+   Global Styles — ResumeCraft
+   =========================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
 
 :root {
-  /* Color Palette */
-  --primary: #6366f1;          /* Indigo 500 */
-  --primary-dark: #4f46e5;     /* Indigo 600 */
-  --secondary: #ec4899;        /* Pink 500 */
-  --accent: #8b5cf6;           /* Violet 500 */
-  
-  --success: #10b981;          /* Emerald 500 */
-  --info: #0ea5e9;             /* Sky 500 */
-  --warning: #f59e0b;          /* Amber 500 */
-  --danger: #ef4444;           /* Red 500 */
+  /* === Brand Colors === */
+  --primary: #4f46e5;
+  --primary-color: #4f46e5;
+  --primary-hover: #4338ca;
+  --accent: #7c3aed;
+  --secondary-color: #7c3aed;
+  --success: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
 
-  /* Neutrals */
-  --bg-main: #fcfdfe;
+  /* === Surfaces === */
+  --bg-light: #f8fafc;
   --bg-subtle: #f1f5f9;
-  --text-main: #0f172a;        /* Slate 900 */
-  --text-muted: #64748b;       /* Slate 500 */
-  --border-light: #e2e8f0;     /* Slate 200 */
+  --card-bg: #ffffff;
+  --sidebar-bg: #ffffff;
 
-  /* Effects */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  /* === Typography === */
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --text-light: #94a3b8;
+
+  /* === Borders & Radius === */
+  --border-light: #e2e8f0;
+  --border-color: #e2e8f0;
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+  --border-radius: 12px;
+
+  /* === Shadows === */
+  --shadow-soft: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-  
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 20px;
-  --radius-full: 9999px;
 
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* === Transitions === */
+  --transition: all 0.2s ease;
+  --transition-slow: all 0.35s ease;
 }
 
+/* === Reset & Base === */
+*, *::before, *::after { box-sizing: border-box; }
+
 body {
-  background-color: var(--bg-main);
+  background-color: var(--bg-light);
   color: var(--text-main);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   margin: 0;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Typography Refinements */
+/* === Animations === */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.2); }
+  50% { box-shadow: 0 0 0 8px rgba(79, 70, 229, 0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease both;
+}
+
+.animate-slide-right {
+  animation: slideInRight 0.3s ease both;
+}
+
+/* === Cards === */
+.modern-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+  padding: 2rem;
+  border: 1px solid var(--border-light);
+  transition: box-shadow var(--transition);
+}
+
+.modern-card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+/* === Buttons === */
+.btn-vibrant {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+  text-decoration: none;
+  line-height: 1.5;
+}
+
+.btn-vibrant:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.35);
+  opacity: 0.95;
+  color: white;
+}
+
+.btn-vibrant:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-vibrant:disabled {
+  background: #cbd5e1;
+  transform: none;
+  opacity: 1;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* === Forms === */
+.form-label {
+  font-weight: 500;
+  color: var(--text-main);
+  margin-bottom: 0.4rem;
+  font-size: 0.875rem;
+}
+
+.form-control {
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border-light);
+  padding: 0.6rem 0.875rem;
+  font-size: 0.9375rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-family: inherit;
+}
+
+.form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+  outline: none;
+}
+
+.form-control.is-invalid {
+  border-color: var(--danger);
+}
+
+.form-select {
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border-light);
+  padding: 0.6rem 0.875rem;
+  font-size: 0.9375rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-family: inherit;
+}
+
+.form-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+  outline: none;
+}
+
+/* === Typography === */
 h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
-  letter-spacing: -0.025em;
   color: var(--text-main);
+}
+
+h2 {
+  margin-bottom: 1.5rem;
 }
 
 .text-gradient {
   background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/* Modern Card Utilities */
-.modern-card {
-  background: #ffffff;
-  border-radius: var(--radius-md);
+/* === Section Icon === */
+.section-icon {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, rgba(79,70,229,0.12) 0%, rgba(124,58,237,0.12) 100%);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+/* === Experience/Education Items === */
+.experience-item {
+  background: var(--bg-subtle);
   border: 1px solid var(--border-light);
-  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-md);
   transition: var(--transition);
 }
 
-.modern-card:hover {
-  box-shadow: var(--shadow-xl);
-  transform: translateY(-2px);
+.experience-item:hover {
+  border-color: rgba(79, 70, 229, 0.25);
 }
 
-.glass-card {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+/* === Progress Bar === */
+.progress {
+  background-color: var(--bg-subtle);
+  border-radius: var(--radius-full);
+}
+
+.progress-bar {
+  background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+  border-radius: var(--radius-full);
+  transition: width 0.6s ease;
+}
+
+/* === Badges === */
+.badge {
+  font-weight: 500;
+}
+
+/* === Dashed border === */
+.border-dashed {
+  border: 2px dashed var(--border-light) !important;
+}
+
+/* === Toast === */
+.toast-container {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 9999;
+}
+
+.toast-success {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  padding: 0.875rem 1.25rem;
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 500;
+  animation: slideInRight 0.3s ease;
 }
 
-/* Button Enhancements */
-.btn-vibrant {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+.toast-error {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
   color: white;
-  border: none;
-  border-radius: var(--radius-full);
-  padding: 0.75rem 1.75rem;
-  font-weight: 600;
-  box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.39);
-  transition: var(--transition);
+  padding: 0.875rem 1.25rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 500;
+  animation: slideInRight 0.3s ease;
 }
 
-.btn-vibrant:hover {
-  transform: scale(1.02);
-  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.23);
-  color: white;
-  opacity: 0.95;
+/* === Scrollbar === */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: var(--radius-full); }
+::-webkit-scrollbar-thumb:hover { background: var(--text-light); }
+
+/* =====================================================
+   PRINT / PDF EXPORT STYLES
+   These fire when window.print() is called.
+   Goal: hide the app shell, show only the resume,
+   black-on-white, multi-page natural flow.
+   ===================================================== */
+@media print {
+  /* ── Page setup ── */
+  @page {
+    size: A4 portrait;
+    margin: 15mm 15mm 15mm 15mm; /* Standard professional margins on all pages */
+  }
+
+  /* ── Hide everything on the page by default ── */
+  body * {
+    visibility: hidden !important;
+  }
+
+  /* ── Show ONLY the print target and its descendants ── */
+  #resume-print-target,
+  #resume-print-target *,
+  .md-preview-content,
+  .md-preview-content * {
+    visibility: visible !important;
+  }
+
+  /* ── Position the print target at the top-left of the print layout ── */
+  #resume-print-target,
+  .md-preview-content {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    min-height: unset !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    overflow: visible !important;
+    page-break-inside: auto !important;
+  }
+
+  /* Allow section items to split across pages, avoiding huge blank gaps */
+  .item, .item-modern, .exec-item, .tech-item {
+    page-break-inside: auto !important;
+  }
+
+  /* Prevent page breaks inside bullet points and item headers to avoid orphans */
+  li, 
+  .item-header, 
+  .item-meta, 
+  .role, 
+  .loc, 
+  .tech-item-header {
+    page-break-inside: avoid !important;
+  }
+
+  /* ── CLASSIC template: force all text to black ── */
+  .template-classic,
+  .template-classic * {
+    color: #000 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Keep the divider line */
+  .template-classic .section {
+    border-top-color: #000 !important;
+  }
+
+  /* ── MODERN template print overrides ── */
+  .template-modern,
+  .template-modern * {
+    color: #000 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .template-modern .header-banner {
+    display: none !important;
+  }
+
+  .template-modern .section-title-modern {
+    color: #000 !important;
+  }
+
+  .template-modern .section-title-modern::after {
+    background: #000 !important;
+  }
+
+  .template-modern .skill-tag-modern {
+    border-color: #ccc !important;
+    background: #f5f5f5 !important;
+    color: #000 !important;
+  }
+
+  /* ── EXECUTIVE template print overrides ── */
+  .template-executive .executive-sidebar {
+    background: #f0f0f0 !important;
+    color: #000 !important;
+  }
+
+  .template-executive .executive-sidebar * {
+    color: #000 !important;
+  }
+
+  .template-executive .sidebar-title {
+    color: #333 !important;
+    border-color: #aaa !important;
+    background: transparent !important;
+  }
+
+  .template-executive .skill-tag-exec {
+    background: #eee !important;
+    color: #000 !important;
+    border-color: #ccc !important;
+  }
+
+  /* ── TECH template print overrides ── */
+  .template-tech,
+  .template-tech * {
+    color: #000 !important;
+    background: transparent !important;
+  }
+
+  .template-tech .terminal-prompt,
+  .template-tech .tag-level,
+  .template-tech .cert-bullet,
+  .template-tech .subtitle {
+    color: #333 !important;
+  }
+
+  /* ── Date: always black in print ── */
+  .date, .date-cert {
+    color: #000 !important;
+  }
+
+  /* ── Suppress link decoration ── */
+  a {
+    text-decoration: none !important;
+    color: #000 !important;
+  }
 }
 
-.btn-vibrant:active {
-  transform: scale(0.98);
-}
-
-/* Form Styling */
-.form-label {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  margin-bottom: 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.form-control {
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-light);
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
-  transition: var(--transition);
-  background-color: var(--bg-subtle);
-}
-
-.form-control:focus {
-  background-color: #fff;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
-  outline: none;
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg-main);
-}
-
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: var(--radius-full);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.5s ease-out forwards;
-}

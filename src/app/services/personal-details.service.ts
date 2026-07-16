@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { PersonalDetails } from "../models/personal-details.model";
+import { getApiUrl } from "../config/api-config";
 
 
 @Injectable({
@@ -9,7 +10,7 @@ import { PersonalDetails } from "../models/personal-details.model";
 })
 
 export class PersonalDetailsService {
-    private apiUrl = 'https://localhost:7216/api/PersonalDetails';
+    private apiUrl = getApiUrl('PersonalDetails');
 
     constructor(private http: HttpClient){}
 

@@ -1,0 +1,52 @@
+<div class="rte-toolbar" role="toolbar" aria-label="Text formatting toolbar">
+  <button type="button" class="rte-btn" title="Bold (wraps in **text**)" (click)="applyBold()">
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path>
+      <path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path>
+    </svg>
+    <span>Bold</span>
+  </button>
+
+  <button type="button" class="rte-btn" title="Italic (wraps in *text*)" (click)="applyItalic()">
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="19" y1="4" x2="10" y2="4"></line>
+      <line x1="14" y1="20" x2="5" y2="20"></line>
+      <line x1="15" y1="4" x2="9" y2="20"></line>
+    </svg>
+    <span>Italic</span>
+  </button>
+
+  <div class="rte-divider"></div>
+
+  <button type="button" class="rte-btn" title="Bullet Point (• item)" (click)="applyBullet()">
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="9" y1="6" x2="20" y2="6"></line>
+      <line x1="9" y1="12" x2="20" y2="12"></line>
+      <line x1="9" y1="18" x2="20" y2="18"></line>
+      <circle cx="4" cy="6" r="1.5" fill="currentColor" stroke="none"></circle>
+      <circle cx="4" cy="12" r="1.5" fill="currentColor" stroke="none"></circle>
+      <circle cx="4" cy="18" r="1.5" fill="currentColor" stroke="none"></circle>
+    </svg>
+    <span>Bullet</span>
+  </button>
+
+  <button type="button" class="rte-btn" title="Bold Heading (wraps entire line in **text**)" (click)="applyHeading()">
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 12h16"></path>
+      <path d="M4 6h16"></path>
+      <path d="M4 18h16"></path>
+    </svg>
+    <span>Heading</span>
+  </button>
+
+  <div class="rte-divider"></div>
+
+  <button type="button" class="rte-btn rte-btn-danger" title="Clear all formatting" (click)="clearFormatting()">
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path>
+      <line x1="16" y1="8" x2="2" y2="22"></line>
+      <line x1="17.5" y1="15" x2="9" y2="15"></line>
+    </svg>
+    <span>Clear</span>
+  </button>
+</div>

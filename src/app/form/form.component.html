@@ -44,6 +44,15 @@
                                 (removeSkill)="removeSkill($event)">
                             </app-skills-achievements>
                         }
+
+                        @if (currentSection() === 'certifications') {
+                            <app-certifications
+                                [certificationsForm]="form"
+                                [formArray]="certifications"
+                                (addCertification)="addCertification()"
+                                (removeCertification)="removeCertification($event)">
+                            </app-certifications>
+                        }
                     </div>
 
                     <!-- Builder Actions (Optional Global Actions) -->
@@ -76,6 +85,14 @@
                                 <button type="button" class="btn btn-outline-primary rounded-pill px-3 fw-semibold small" (click)="addSkill()">
                                     + Add
                                 </button>
+                                <button type="button" class="btn-vibrant px-4 shadow-lg fw-bold" (click)="goNext()">
+                                    Next
+                                </button>
+                            }
+                            @if (currentSection() === 'certifications') {
+                                <button type="button" class="btn btn-outline-primary rounded-pill px-3 fw-semibold small" (click)="addCertification()">
+                                    + Add
+                                </button>
                                 <button type="button" class="btn-vibrant px-4 shadow-lg fw-bold" (click)="submitResume()" [disabled]="isSaving()">
                                     {{ isSaving() ? 'Saving...' : 'Save Resume' }}
                                 </button>
@@ -93,6 +110,9 @@
           <div class="d-flex align-items-center justify-content-between mb-4">
             <h5 class="text-uppercase fw-bold text-muted small mb-0 tracking-widest">Live Preview</h5>
             <div class="d-flex gap-2 align-items-center">
+                <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-bold" (click)="showTemplatePicker.set(true)">
+                    Template
+                </button>
                 <button class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" (click)="downloadPdf()" [disabled]="isExporting()">
                     @if (isExporting()) {
                         <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
@@ -104,8 +124,16 @@
                 <span class="badge bg-success-subtle text-success rounded-pill px-3">Syncing...</span>
             </div>
           </div>
-          <app-preview [resume]="resumeSignal() || form.value" />
+          <app-preview [resume]="resumeSignal() || form.value" [templateId]="templateIdSignal()" />
         </div>
       </aside>
     </div>
 </div>
+
+@if (showTemplatePicker()) {
+    <app-template-picker 
+        [selectedTemplateId]="templateIdSignal()" 
+        (templateSelect)="selectTemplate($event)" 
+        (close)="showTemplatePicker.set(false)">
+    </app-template-picker>
+}

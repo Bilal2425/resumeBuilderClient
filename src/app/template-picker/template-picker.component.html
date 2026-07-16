@@ -1,0 +1,38 @@
+<div class="picker-overlay" (click)="close.emit()">
+  <div class="picker-modal animate-fade-in" (click)="$event.stopPropagation()">
+    <div class="picker-header">
+      <h5 class="mb-0 fw-bold">Choose Template</h5>
+      <button class="btn-ghost" type="button" (click)="close.emit()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    <p class="text-muted small px-4 mb-4">All templates are ATS-compatible and print-optimized</p>
+    <div class="templates-grid">
+      @for (tmpl of templates; track tmpl.id) {
+        <div class="template-card" [class.selected]="selectedTemplateId() === tmpl.id" (click)="selectTemplate(tmpl.id)">
+          <div class="template-thumbnail" [style.border-top-color]="tmpl.accent">
+            <div class="thumb-header" [style.background]="tmpl.accent"></div>
+            <div class="thumb-line long"></div>
+            <div class="thumb-line medium"></div>
+            <div class="thumb-divider"></div>
+            <div class="thumb-line short"></div>
+            <div class="thumb-line long"></div>
+            <div class="thumb-line medium"></div>
+          </div>
+          <div class="template-info">
+            <div class="d-flex align-items-center justify-content-between mb-1">
+              <span class="fw-semibold small">{{ tmpl.name }}</span>
+              @if (selectedTemplateId() === tmpl.id) {
+                <span class="badge bg-primary-subtle text-primary small">Active</span>
+              }
+            </div>
+            <p class="text-muted" style="font-size: 0.75rem; margin: 0;">{{ tmpl.description }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

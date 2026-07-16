@@ -1,0 +1,511 @@
+<div #resumePreview class="preview-paper" [class]="templateId()">
+  <!-- CLASSIC TEMPLATE -->
+  @if (templateId() === 'classic') {
+    <div class="template-classic">
+      <header class="text-center mb-3">
+        <h1 class="name">{{ fullName }}</h1>
+        <div class="contact-info">
+          @if (resume()?.personalDetails?.email) {
+            <span class="contact-item">
+              <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="contact-icon"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+              {{ resume()?.personalDetails?.email }}
+            </span>
+          }
+          @if (resume()?.personalDetails?.phoneNumber) {
+            <span class="contact-item">
+              <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="contact-icon"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              {{ resume()?.personalDetails?.phoneNumber }}
+            </span>
+          }
+          @if (resume()?.personalDetails?.location) {
+            <span class="contact-item">
+              <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="contact-icon"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              {{ resume()?.personalDetails?.location }}
+            </span>
+          }
+          @if (resume()?.personalDetails?.linkedIn) {
+            <a [href]="ensureExternalUrl(resume()?.personalDetails?.linkedIn)" target="_blank" class="contact-item">
+              <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="contact-icon"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+              LinkedIn
+            </a>
+          }
+          @if (resume()?.personalDetails?.github) {
+            <a [href]="ensureExternalUrl(resume()?.personalDetails?.github)" target="_blank" class="contact-item">
+              <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="contact-icon"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+              GitHub
+            </a>
+          }
+          @if (resume()?.personalDetails?.portfolio) {
+            <a [href]="ensureExternalUrl(resume()?.personalDetails?.portfolio)" target="_blank" class="contact-item">
+              <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="contact-icon"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+              Portfolio
+            </a>
+          }
+        </div>
+      </header>
+
+      <!-- Profile -->
+      @if (resume()?.personalDetails?.location && resume()?.personalDetails!.location.length > 50) {
+        <section class="section">
+          <h2 class="section-title">Profile</h2>
+          <div class="profile-text">{{ resume()?.personalDetails?.location }}</div>
+        </section>
+      }
+
+      <!-- Education -->
+      @if (educations.length > 0) {
+        <section class="section">
+          <h2 class="section-title">Education</h2>
+          @for (edu of educations; track $index) {
+            <div class="item">
+              <div class="item-header">
+                <div><strong>{{ edu.degree }}</strong>, <em>{{ edu.collegeName }}</em></div>
+                <span class="date">{{ edu.startDate }} – {{ edu.endDate }}</span>
+              </div>
+              <div class="major-classic">{{ edu.major }}</div>
+              @if (edu.location || edu.gpa) {
+                <div class="location-classic">
+                  {{ edu.location }}
+                  @if (edu.gpa) {
+                    | GPA: {{ edu.gpa }}
+                  }
+                </div>
+              }
+            </div>
+          }
+        </section>
+      }
+
+      <!-- Experience -->
+      @if (experiences.length > 0) {
+        <section class="section">
+          <h2 class="section-title">Professional Experience</h2>
+          @for (work of experiences; track $index) {
+            <div class="item">
+              <div class="item-header">
+                <div><strong>{{ work.position }}</strong>, <em>{{ work.companyName }}</em></div>
+                <span class="date">{{ work.startDate }} – {{ work.endDate }}</span>
+              </div>
+              @if (work.location) {
+                <div class="location-classic">{{ work.location }}</div>
+              }
+              <div class="desc-bullets-classic" [innerHTML]="formatBullets(work.description)"></div>
+            </div>
+          }
+        </section>
+      }
+
+      <!-- Skills -->
+      @if (skills.length > 0) {
+        <section class="section">
+          <h2 class="section-title">Skills</h2>
+          <ul class="skills-list-classic">
+            @for (skill of skills; track $index) {
+              <li>{{ skill.name }}</li>
+            }
+          </ul>
+        </section>
+      }
+
+      <!-- Certifications -->
+      @if (certifications.length > 0) {
+        <section class="section">
+          <h2 class="section-title">Certificates</h2>
+          <div class="cert-grid-classic">
+            @for (cert of certifications; track $index) {
+              <div class="cert-col-classic">
+                <span class="cert-bullet-classic">•</span>
+                <div>
+                  @if (cert.verificationUrl) {
+                    <a [href]="ensureExternalUrl(cert.verificationUrl)" target="_blank" class="cert-link-classic">{{ cert.name }}</a>
+                    <a [href]="ensureExternalUrl(cert.verificationUrl)" target="_blank" class="verify-link-classic">(Verify)</a>
+                  } @else {
+                    <span>{{ cert.name }}</span>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </section>
+      }
+    </div>
+  }
+
+  <!-- MODERN TEMPLATE -->
+  @if (templateId() === 'modern') {
+    <div class="template-modern">
+      <div class="header-banner"></div>
+      <header class="modern-header mb-4">
+        <h1 class="name">{{ fullName }}</h1>
+        <div class="contact-info-modern">
+          <div class="info-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            {{ resume()?.personalDetails?.email }}
+          </div>
+          @if (resume()?.personalDetails?.phoneNumber) {
+            <div class="info-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              {{ resume()?.personalDetails?.phoneNumber }}
+            </div>
+          }
+          @if (resume()?.personalDetails?.location) {
+            <div class="info-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              {{ resume()?.personalDetails?.location }}
+            </div>
+          }
+          @if (resume()?.personalDetails?.linkedIn) {
+            <div class="info-item">
+              <a [href]="ensureExternalUrl(resume()?.personalDetails?.linkedIn)" target="_blank" style="color: inherit; text-decoration: none; display: inline-flex; align-items: center;">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                LinkedIn
+              </a>
+            </div>
+          }
+          @if (resume()?.personalDetails?.github) {
+            <div class="info-item">
+              <a [href]="ensureExternalUrl(resume()?.personalDetails?.github)" target="_blank" style="color: inherit; text-decoration: none; display: inline-flex; align-items: center;">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                GitHub
+              </a>
+            </div>
+          }
+          @if (resume()?.personalDetails?.portfolio) {
+            <div class="info-item">
+              <a [href]="ensureExternalUrl(resume()?.personalDetails?.portfolio)" target="_blank" style="color: inherit; text-decoration: none; display: inline-flex; align-items: center;">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                Portfolio
+              </a>
+            </div>
+          }
+        </div>
+      </header>
+
+      <div class="row g-4">
+        <div class="col-8 main-content">
+          <!-- Experience -->
+          @if (experiences.length > 0) {
+            <section class="section">
+              <h2 class="section-title-modern">Experience</h2>
+              @for (work of experiences; track $index) {
+                <div class="item-modern">
+                  <div class="item-meta">
+                    <span class="company">{{ work.companyName }}</span>
+                    <span class="date">{{ work.startDate }} - {{ work.endDate }}</span>
+                  </div>
+                  <h4 class="role">{{ work.position }}</h4>
+                  <div class="loc">{{ work.location }}</div>
+                  <div class="desc" [innerHTML]="formatBullets(work.description)"></div>
+                </div>
+              }
+            </section>
+          }
+
+          <!-- Education -->
+          @if (educations.length > 0) {
+            <section class="section">
+              <h2 class="section-title-modern">Education</h2>
+              @for (edu of educations; track $index) {
+                <div class="item-modern">
+                  <div class="item-meta">
+                    <span class="company">{{ edu.collegeName }}</span>
+                    <span class="date">{{ edu.startDate }} - {{ edu.endDate }}</span>
+                  </div>
+                  <h4 class="role">{{ edu.degree }} in {{ edu.major }}</h4>
+                  <div class="loc">
+                    {{ edu.location }}
+                    @if (edu.gpa) {
+                      | GPA: {{ edu.gpa }}
+                    }
+                  </div>
+                </div>
+              }
+            </section>
+          }
+        </div>
+
+        <div class="col-4 sidebar-content">
+          <!-- Skills -->
+          @if (skills.length > 0) {
+            <section class="section">
+              <h2 class="section-title-modern">Skills</h2>
+              <div class="d-flex flex-wrap gap-2">
+                @for (skill of skills; track $index) {
+                  <span class="skill-tag-modern">{{ skill.name }}</span>
+                }
+              </div>
+            </section>
+          }
+
+          <!-- Certifications -->
+          @if (certifications.length > 0) {
+            <section class="section">
+              <h2 class="section-title-modern">Certifications</h2>
+              @for (cert of certifications; track $index) {
+                <div class="cert-item-modern mb-3">
+                  <h5 class="cert-name">{{ cert.name }}</h5>
+                  <div class="cert-issuer small text-muted">{{ cert.issuingOrganization }}</div>
+                  @if (cert.issueDate) {
+                    <div class="cert-date small text-muted">{{ cert.issueDate }}</div>
+                  }
+                  @if (cert.verificationUrl) {
+                    <a [href]="ensureExternalUrl(cert.verificationUrl)" target="_blank" class="verify-link-modern small">Verify Certification</a>
+                  }
+                </div>
+              }
+            </section>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- EXECUTIVE TEMPLATE -->
+  @if (templateId() === 'executive') {
+    <div class="template-executive">
+      <div class="row g-0 h-100">
+        <div class="col-4 executive-sidebar">
+          <div class="sidebar-header mb-5">
+            <h1 class="name">{{ fullName }}</h1>
+            <p class="title-sub text-uppercase tracking-widest text-primary-light">Professional Profile</p>
+          </div>
+
+          <div class="contact-executive mb-5">
+            <h4 class="sidebar-title">Contact</h4>
+            <div class="contact-item">
+              <div class="label">Email</div>
+              <div class="val">{{ resume()?.personalDetails?.email }}</div>
+            </div>
+            @if (resume()?.personalDetails?.phoneNumber) {
+              <div class="contact-item">
+                <div class="label">Phone</div>
+                <div class="val">{{ resume()?.personalDetails?.phoneNumber }}</div>
+              </div>
+            }
+            @if (resume()?.personalDetails?.location) {
+              <div class="contact-item">
+                <div class="label">Address</div>
+                <div class="val">{{ resume()?.personalDetails?.location }}</div>
+              </div>
+            }
+            @if (resume()?.personalDetails?.linkedIn) {
+              <div class="contact-item">
+                <div class="label">LinkedIn</div>
+                <div class="val">
+                  <a [href]="ensureExternalUrl(resume()?.personalDetails?.linkedIn)" target="_blank" style="color: inherit; text-decoration: none;">
+                    {{ resume()?.personalDetails?.linkedIn }}
+                  </a>
+                </div>
+              </div>
+            }
+            @if (resume()?.personalDetails?.github) {
+              <div class="contact-item">
+                <div class="label">GitHub</div>
+                <div class="val">
+                  <a [href]="ensureExternalUrl(resume()?.personalDetails?.github)" target="_blank" style="color: inherit; text-decoration: none;">
+                    {{ resume()?.personalDetails?.github }}
+                  </a>
+                </div>
+              </div>
+            }
+            @if (resume()?.personalDetails?.portfolio) {
+              <div class="contact-item">
+                <div class="label">Portfolio</div>
+                <div class="val">
+                  <a [href]="ensureExternalUrl(resume()?.personalDetails?.portfolio)" target="_blank" style="color: inherit; text-decoration: none;">
+                    {{ resume()?.personalDetails?.portfolio }}
+                  </a>
+                </div>
+              </div>
+            }
+          </div>
+
+          <!-- Skills -->
+          @if (skills.length > 0) {
+            <div class="skills-executive mb-5">
+              <h4 class="sidebar-title">Expertise</h4>
+              <div class="d-flex flex-wrap gap-2">
+                @for (skill of skills; track $index) {
+                  <span class="skill-tag-exec">{{ skill.name }}</span>
+                }
+              </div>
+            </div>
+          }
+
+          <!-- Certifications -->
+          @if (certifications.length > 0) {
+            <div class="certs-executive">
+              <h4 class="sidebar-title">Credentials</h4>
+              @for (cert of certifications; track $index) {
+                <div class="cert-item-exec">
+                  <div class="cert-name">{{ cert.name }}</div>
+                  <div class="cert-org">{{ cert.issuingOrganization }}</div>
+                  @if (cert.verificationUrl) {
+                    <a [href]="ensureExternalUrl(cert.verificationUrl)" target="_blank" class="verify-link-exec">Verify Code</a>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="col-8 executive-body">
+          <!-- Experience -->
+          @if (experiences.length > 0) {
+            <section class="section mb-5">
+              <h2 class="body-title">Career History</h2>
+              @for (work of experiences; track $index) {
+                <div class="exec-item">
+                  <div class="d-flex justify-content-between align-items-baseline mb-1">
+                    <h4 class="position">{{ work.position }}</h4>
+                    <span class="date">{{ work.startDate }} - {{ work.endDate }}</span>
+                  </div>
+                  <div class="company">{{ work.companyName }} | {{ work.location }}</div>
+                  <div class="desc" [innerHTML]="formatBullets(work.description)"></div>
+                </div>
+              }
+            </section>
+          }
+
+          <!-- Education -->
+          @if (educations.length > 0) {
+            <section class="section">
+              <h2 class="body-title">Education Background</h2>
+              @for (edu of educations; track $index) {
+                <div class="exec-item">
+                  <div class="d-flex justify-content-between align-items-baseline mb-1">
+                    <h4 class="position">{{ edu.degree }} in {{ edu.major }}</h4>
+                    <span class="date">{{ edu.startDate }} - {{ edu.endDate }}</span>
+                  </div>
+                  <div class="company">{{ edu.collegeName }} | {{ edu.location }}</div>
+                  @if (edu.gpa) {
+                    <div class="gpa-exec text-muted small">Grade Point Average: {{ edu.gpa }}</div>
+                  }
+                </div>
+              }
+            </section>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- TECH TEMPLATE -->
+  @if (templateId() === 'tech') {
+    <div class="template-tech">
+      <header class="tech-header mb-4">
+        <div class="row align-items-center">
+          <div class="col-8">
+            <h1 class="name"><span class="terminal-prompt">$</span> {{ fullName }}</h1>
+            <p class="subtitle">&gt; Software Engineer / Technologist</p>
+          </div>
+          <div class="col-4 text-end">
+            <div class="contact-info-tech">
+              <div>{{ resume()?.personalDetails?.email }}</div>
+              @if (resume()?.personalDetails?.phoneNumber) {
+                <div>{{ resume()?.personalDetails?.phoneNumber }}</div>
+              }
+              @if (resume()?.personalDetails?.location) {
+                <div>{{ resume()?.personalDetails?.location }}</div>
+              }
+              @if (resume()?.personalDetails?.linkedIn) {
+                <div>
+                  <a [href]="ensureExternalUrl(resume()?.personalDetails?.linkedIn)" target="_blank" style="color: inherit; text-decoration: none;">
+                    linkedIn: {{ resume()?.personalDetails?.linkedIn }}
+                  </a>
+                </div>
+              }
+              @if (resume()?.personalDetails?.github) {
+                <div>
+                  <a [href]="ensureExternalUrl(resume()?.personalDetails?.github)" target="_blank" style="color: inherit; text-decoration: none;">
+                    github: {{ resume()?.personalDetails?.github }}
+                  </a>
+                </div>
+              }
+              @if (resume()?.personalDetails?.portfolio) {
+                <div>
+                  <a [href]="ensureExternalUrl(resume()?.personalDetails?.portfolio)" target="_blank" style="color: inherit; text-decoration: none;">
+                    portfolio: {{ resume()?.personalDetails?.portfolio }}
+                  </a>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Skills (Top-level in Tech) -->
+      @if (skills.length > 0) {
+        <section class="section mb-4">
+          <h2 class="tech-title">// Technical Stack</h2>
+          <div class="tech-skills-grid">
+            @for (skill of skills; track $index) {
+              <div class="tech-skill-tag">
+                <span class="tag-name">{{ skill.name }}</span>
+              </div>
+            }
+          </div>
+        </section>
+      }
+
+      <!-- Experience -->
+      @if (experiences.length > 0) {
+        <section class="section mb-4">
+          <h2 class="tech-title">// Professional Experience</h2>
+          @for (work of experiences; track $index) {
+            <div class="tech-item">
+              <div class="tech-item-header">
+                <span class="role">{{ work.position }}</span>
+                <span class="company">&#64; {{ work.companyName }}</span>
+                <span class="date">[{{ work.startDate }} -- {{ work.endDate }}]</span>
+              </div>
+              <div class="meta text-muted">{{ work.location }}</div>
+              <div class="desc" [innerHTML]="formatBullets(work.description)"></div>
+            </div>
+          }
+        </section>
+      }
+
+      <!-- Education -->
+      @if (educations.length > 0) {
+        <section class="section mb-4">
+          <h2 class="tech-title">// Academic Background</h2>
+          @for (edu of educations; track $index) {
+            <div class="tech-item">
+              <div class="tech-item-header">
+                <span class="role">{{ edu.degree }} ({{ edu.major }})</span>
+                <span class="company">&#64; {{ edu.collegeName }}</span>
+                <span class="date">[{{ edu.startDate }} -- {{ edu.endDate }}]</span>
+              </div>
+              <div class="meta text-muted">
+                {{ edu.location }}
+                @if (edu.gpa) {
+                  | GPA: {{ edu.gpa }}
+                }
+              </div>
+            </div>
+          }
+        </section>
+      }
+
+      <!-- Certifications -->
+      @if (certifications.length > 0) {
+        <section class="section">
+          <h2 class="tech-title">// Certifications &amp; Licenses</h2>
+          <div class="tech-certs">
+            @for (cert of certifications; track $index) {
+              <div class="tech-cert-item">
+                <span class="cert-bullet">&gt;</span>
+                <span class="cert-name">{{ cert.name }}</span>
+                <span class="cert-org">[{{ cert.issuingOrganization }}]</span>
+                @if (cert.verificationUrl) {
+                  <span class="cert-link">[<a [href]="ensureExternalUrl(cert.verificationUrl)" target="_blank">Verify</a>]</span>
+                }
+              </div>
+            }
+          </div>
+        </section>
+      }
+    </div>
+  }
+</div>

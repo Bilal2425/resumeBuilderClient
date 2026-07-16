@@ -1,0 +1,8 @@
+.desc-textarea {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  resize: vertical;
+}

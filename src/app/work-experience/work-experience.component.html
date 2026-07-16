@@ -58,7 +58,18 @@
               </div>
               <div class="col-12">
                 <label class="form-label">Description</label>
-                <textarea class="form-control" [class.is-invalid]="workExperience.get('description')?.invalid && workExperience.get('description')?.touched" formControlName="description" rows="4" placeholder="Describe your key responsibilities and achievements..."></textarea>
+                <app-rich-text-toolbar
+                  [textareaRef]="descTextarea"
+                  (textChange)="onDescriptionChange(i, $event)">
+                </app-rich-text-toolbar>
+                <textarea #descTextarea class="form-control desc-textarea"
+                  [class.is-invalid]="workExperience.get('description')?.invalid && workExperience.get('description')?.touched"
+                  formControlName="description" rows="5"
+                  placeholder="• Describe your key responsibilities and achievements...&#10;• Use the toolbar above to format your text">
+                </textarea>
+                <div class="form-text text-muted small mt-1 opacity-75">
+                  💡 Supports Markdown: **bold**, *italic*, and • bullets.
+                </div>
                 @if (workExperience.get('description')?.invalid && workExperience.get('description')?.touched) {
                   <div class="invalid-feedback">Description is required.</div>
                 }

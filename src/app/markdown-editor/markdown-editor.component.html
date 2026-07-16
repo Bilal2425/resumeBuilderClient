@@ -1,0 +1,189 @@
+<div class="md-editor-container">
+
+  <!-- ── Toolbar ─────────────────────────────────────────────────────── -->
+  <div class="md-toolbar py-3 px-4 shadow-sm">
+    <div class="d-flex align-items-center gap-3">
+      <div class="toolbar-icon me-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+      </div>
+      <h5 class="mb-0 fw-bold">Markdown <span class="text-gradient">Editor</span></h5>
+    </div>
+
+    <div class="d-flex gap-2 align-items-center flex-wrap">
+
+      <!-- Formatting Guide toggle -->
+      <button class="btn btn-sm rounded-pill px-3 fw-semibold"
+              [class.btn-outline-secondary]="!showHelp()"
+              [class.btn-warning]="showHelp()"
+              (click)="toggleHelp()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" class="me-1">
+          <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        Guide
+      </button>
+
+      <!-- Typography toggle -->
+      <button class="btn btn-sm rounded-pill px-3 fw-semibold"
+              [class.btn-outline-secondary]="!showTypography()"
+              [class.btn-info]="showTypography()"
+              (click)="toggleTypography()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" class="me-1">
+          <polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/>
+          <line x1="12" y1="4" x2="12" y2="20"/>
+        </svg>
+        Typography
+      </button>
+
+      <div class="toolbar-divider"></div>
+
+      <!-- Template switcher -->
+      <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-semibold"
+              [class.active]="currentTemplate() === 'blank'"
+              (click)="loadTemplate('blank')">Blank</button>
+      <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-semibold"
+              [class.active]="currentTemplate() === 'ats'"
+              (click)="loadTemplate('ats')">ATS Template</button>
+
+      <div class="toolbar-divider"></div>
+
+      <!-- Download PDF -->
+      <button class="btn btn-sm btn-vibrant rounded-pill px-4 fw-bold shadow-sm"
+              (click)="downloadPdf()" [disabled]="isExporting()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" class="me-1">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download PDF
+      </button>
+
+      <a routerLink="/dashboard" class="btn btn-sm btn-light rounded-pill px-3 fw-semibold border">← Back</a>
+    </div>
+  </div>
+
+  <!-- ── Formatting Guide Panel ──────────────────────────────────────── -->
+  @if (showHelp()) {
+    <div class="md-help-panel px-4 py-3">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <h6 class="fw-bold mb-2">📝 Headings</h6>
+          <code># Your Name</code> → Main title<br>
+          <code>## Section Title</code> → Section<br>
+          <code>### Job Title</code> → Subsection
+        </div>
+        <div class="col-md-4">
+          <h6 class="fw-bold mb-2">✨ Formatting</h6>
+          <code>**bold**</code> → <strong>bold</strong><br>
+          <code>*italic*</code> → <em>italic</em><br>
+          <code>---</code> → divider line
+        </div>
+        <div class="col-md-4">
+          <h6 class="fw-bold mb-2">📋 Bullet Lists</h6>
+          <code>- Achieved X by doing Y</code><br>
+          <code>- Reduced costs by 30%</code><br>
+          <code>- Led a team of 5 engineers</code>
+        </div>
+      </div>
+      <div class="mt-2 small text-muted">
+        💡 <strong>Tip:</strong> Start with the <em>ATS Template</em> and replace placeholder text with your details.
+      </div>
+    </div>
+  }
+
+  <!-- ── Typography Panel ────────────────────────────────────────────── -->
+  @if (showTypography()) {
+    <div class="typography-panel px-4 py-3">
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2">
+          <polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/>
+          <line x1="12" y1="4" x2="12" y2="20"/>
+        </svg>
+        <span class="fw-bold small">Adjust Font Sizes</span>
+        <span class="text-muted small ms-1">— changes apply live in the preview</span>
+      </div>
+      <div class="d-flex gap-4 flex-wrap">
+
+        <!-- Your Name (h1) -->
+        <div class="type-row">
+          <span class="type-label">Your Name</span>
+          <div class="size-control">
+            <button class="size-btn" (click)="adjustH1(-1)" [disabled]="h1Size() <= 14">A−</button>
+            <span class="size-badge">{{ h1Size() }}pt</span>
+            <button class="size-btn" (click)="adjustH1(1)"  [disabled]="h1Size() >= 30">A+</button>
+          </div>
+        </div>
+
+        <!-- Section title (h2) -->
+        <div class="type-row">
+          <span class="type-label">Section Title</span>
+          <div class="size-control">
+            <button class="size-btn" (click)="adjustH2(-0.5)" [disabled]="h2Size() <= 9">A−</button>
+            <span class="size-badge">{{ h2Size() }}pt</span>
+            <button class="size-btn" (click)="adjustH2(0.5)"  [disabled]="h2Size() >= 18">A+</button>
+          </div>
+        </div>
+
+        <!-- Job title (h3) -->
+        <div class="type-row">
+          <span class="type-label">Job Title</span>
+          <div class="size-control">
+            <button class="size-btn" (click)="adjustH3(-0.5)" [disabled]="h3Size() <= 8">A−</button>
+            <span class="size-badge">{{ h3Size() }}pt</span>
+            <button class="size-btn" (click)="adjustH3(0.5)"  [disabled]="h3Size() >= 14">A+</button>
+          </div>
+        </div>
+
+        <!-- Body text -->
+        <div class="type-row">
+          <span class="type-label">Body Text</span>
+          <div class="size-control">
+            <button class="size-btn" (click)="adjustBody(-0.5)" [disabled]="bodySize() <= 7">A−</button>
+            <span class="size-badge">{{ bodySize() }}pt</span>
+            <button class="size-btn" (click)="adjustBody(0.5)"  [disabled]="bodySize() >= 12">A+</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  }
+
+  <!-- ── Split Panes ─────────────────────────────────────────────────── -->
+  <div class="md-split-pane">
+
+    <!-- Editor -->
+    <div class="md-editor-pane">
+      <div class="pane-label">MARKDOWN</div>
+      <textarea class="md-textarea"
+                [value]="markdownContent()"
+                (input)="onMarkdownChange($any($event.target).value)"
+                placeholder="# Your Name&#10;&#10;## Work Experience&#10;&#10;### Job Title — Company&#10;*Date | Location*&#10;&#10;- Achievement bullet&#10;- Another bullet"
+                spellcheck="false"></textarea>
+    </div>
+
+    <div class="md-divider"></div>
+
+    <!-- Preview -->
+    <div class="md-preview-pane">
+      <div class="pane-label">LIVE PREVIEW</div>
+      <div class="md-preview-wrapper">
+        <div class="md-preview-content"
+             #mdPreview
+             [style.font-size.pt]="bodySize()"
+             [style.--md-h1-size]="h1Size() + 'pt'"
+             [style.--md-h2-size]="h2Size() + 'pt'"
+             [style.--md-h3-size]="h3Size() + 'pt'"
+             [innerHTML]="renderedHtml()">
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

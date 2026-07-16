@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { AuthComponent } from './auth/auth.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FormComponent } from './form/form.component';
+import { MarkdownEditorComponent } from './markdown-editor/markdown-editor.component';
 import { AuthService } from './services/auth.service';
 import { authGuard } from './auth.guard';
 
@@ -20,5 +21,8 @@ export const routes: Routes = [
     },
     {
         path: 'dashboard', component: DashboardComponent, canActivate: [authGuard]
+    },
+    {
+        path: 'markdown-editor', component: MarkdownEditorComponent, canActivate: [authGuard]
     }
 ];

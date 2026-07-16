@@ -1,0 +1,112 @@
+<div class="form-section">
+  <div class="d-flex align-items-center mb-5">
+    <div class="section-icon me-3">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="8" r="7"></circle>
+        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+      </svg>
+    </div>
+    <div>
+      <h2 class="mb-0 text-gradient">Certifications</h2>
+      <p class="text-muted small mb-0">Add your professional certifications with verification links</p>
+    </div>
+  </div>
+
+  @if (formArray() && formArray().controls.length > 0) {
+    <div [formGroup]="certificationsForm()">
+      <div formArrayName="certifications">
+        @for (cert of formArray().controls; track i; let i = $index) {
+          <div [formGroupName]="i" class="experience-item modern-card p-4 mb-4">
+            <div class="d-flex justify-content-between align-items-start mb-4">
+              <span class="badge bg-warning-subtle text-warning rounded-pill px-3 py-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="me-1">
+                  <circle cx="12" cy="8" r="7"></circle>
+                  <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                </svg>
+                Certification #{{ i + 1 }}
+              </span>
+              <button type="button" class="btn btn-sm btn-outline-danger border-0 rounded-circle p-2"
+                (click)="onRemoveCertification(i)" title="Remove">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+
+            <div class="row g-4">
+              <div class="col-12">
+                <label class="form-label">Certification Name</label>
+                <input type="text" class="form-control" formControlName="name"
+                  placeholder="e.g. AWS Certified Solutions Architect"
+                  [class.is-invalid]="cert.get('name')?.invalid && cert.get('name')?.touched">
+                @if (cert.get('name')?.invalid && cert.get('name')?.touched) {
+                  <div class="invalid-feedback">Certification name is required.</div>
+                }
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Issuing Organization</label>
+                <input type="text" class="form-control" formControlName="issuingOrganization"
+                  placeholder="e.g. Amazon Web Services"
+                  [class.is-invalid]="cert.get('issuingOrganization')?.invalid && cert.get('issuingOrganization')?.touched">
+                @if (cert.get('issuingOrganization')?.invalid && cert.get('issuingOrganization')?.touched) {
+                  <div class="invalid-feedback">Issuing organization is required.</div>
+                }
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Issue Date</label>
+                <input type="month" class="form-control" formControlName="issueDate">
+              </div>
+              <div class="col-12">
+                <label class="form-label">Verification URL</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-white border-end-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                    </svg>
+                  </span>
+                  <input type="url" class="form-control border-start-0" formControlName="verificationUrl"
+                    placeholder="https://verify.example.com/certificate/...">
+                  @if (cert.get('verificationUrl')?.value) {
+                    <a [href]="cert.get('verificationUrl')?.value" target="_blank" rel="noopener noreferrer"
+                      class="btn btn-outline-primary border-start-0" title="Verify certificate">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                      </svg>
+                    </a>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  } @else {
+    <div class="text-center py-5 border-dashed rounded-4 mb-4">
+      <div class="mb-3 text-muted" style="opacity: 0.4;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <circle cx="12" cy="8" r="7"></circle>
+          <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+        </svg>
+      </div>
+      <p class="text-muted fw-medium mb-1">No certifications added yet.</p>
+      <p class="small text-muted">Add certifications with verification URLs to boost credibility.</p>
+    </div>
+  }
+
+  <div class="mt-4">
+    <button type="button"
+      class="btn btn-outline-primary w-100 py-3 border-2 rounded-pill fw-bold d-flex align-items-center justify-content-center gap-2"
+      (click)="onAddCertification()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      Add Certification
+    </button>
+  </div>
+</div>
