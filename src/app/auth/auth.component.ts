@@ -55,7 +55,8 @@ export class AuthComponent implements OnInit, OnDestroy {
     this.registerForm = this.fb.group({
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      inviteCode: ['', Validators.required]
     });
 
     this.forgotForm = this.fb.group({
@@ -170,7 +171,8 @@ export class AuthComponent implements OnInit, OnDestroy {
     const userRegister: UserRegister = {
       username: this.registerForm.value.username,
       email: this.registerForm.value.email,
-      password: this.registerForm.value.password
+      password: this.registerForm.value.password,
+      inviteCode: this.registerForm.value.inviteCode
     };
 
     this.authService.registerUser(userRegister).subscribe({

@@ -196,6 +196,11 @@
                 </button>
               </div>
             </div>
+            <div class="mb-4">
+              <label class="form-label" for="register-invite-code">Invite Code</label>
+              <input id="register-invite-code" type="text" class="form-control" formControlName="inviteCode"
+                     placeholder="Enter secret invite code" aria-required="true">
+            </div>
             <button type="submit" id="register-submit-btn" class="btn-vibrant w-100" [disabled]="registerForm.invalid || isLoading">
               @if (isLoading) { <span class="spinner-border spinner-border-sm me-2"></span> }
               Create Account
