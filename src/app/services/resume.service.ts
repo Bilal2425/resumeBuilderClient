@@ -4,9 +4,11 @@ import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { ResumeData } from '../models/resume.model';
 
+import { getApiUrl } from '../config/api-config';
+
 @Injectable({ providedIn: 'root' })
 export class ResumeService {
-  private readonly baseUrl = 'https://localhost:7216/api';
+  private readonly baseUrl = getApiUrl('Resume');
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
